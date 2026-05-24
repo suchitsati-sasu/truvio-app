@@ -6,6 +6,7 @@ export default function Pricing() {
 
   const handleSubscribe = async () => {
     setLoading(true)
+    
     const { data: { user } } = await supabase.auth.getUser()
     
     if (!user) {
@@ -13,8 +14,24 @@ export default function Pricing() {
       return
     }
 
-    alert('Stripe checkout coming soon! 🚀')
-    setLoading(false)
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          email: user.email,
+        }),
+      })
+
+      const { url, error } = await res.json()
+      if (error) throw new Error(error)
+      window.location.href = url
+
+    } catch (err) {
+      alert('Something went wrong. Please try again.')
+      setLoading(false)
+    }
   }
 
   return (
@@ -27,7 +44,7 @@ export default function Pricing() {
         <div style={{ color: '#666', marginBottom: '20px' }}>/month after free trial</div>
 
         <div style={{ textAlign: 'left', marginBottom: '30px' }}>
-          {['✅ 14 days free trial', '✅ Unlimited reviews', '✅ Email automation', '✅ Review widget', '✅ Cancel anytime'].map(f => (
+          {['✅ 14 days free trial', '✅ Unlimited reviews', '✅ Email automation', '✅ FOMO widget', '✅ Cancel anytime'].map(f => (
             <div key={f} style={{ padding: '8px 0', fontSize: '16px' }}>{f}</div>
           ))}
         </div>
@@ -35,12 +52,12 @@ export default function Pricing() {
         <button
           onClick={handleSubscribe}
           disabled={loading}
-          style={{ width: '100%', padding: '14px', background: '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '18px', cursor: 'pointer', fontWeight: 'bold' }}
+          style={{ width: '100%', padding: '14px', background: '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '18px', cursor: 'pointer', fontWeight: 'bold', opacity: loading ? 0.7 : 1 }}
         >
-          {loading ? 'Loading...' : 'Start Free Trial 🚀'}
+          {loading ? 'Redirecting...' : 'Start Free Trial 🚀'}
         </button>
 
-        <p style={{ color: '#999', fontSize: '14px', marginTop: '15px' }}>No credit card required</p>
+        <p style={{ color: '#999', fontSize: '14px', marginTop: '15px' }}>No credit card required for trial</p>
       </div>
     </div>
   )
