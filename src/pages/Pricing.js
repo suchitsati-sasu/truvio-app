@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import { loadStripe } from '@stripe/stripe-js'
 import { supabase } from '../supabaseClient'
-
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY)
 
 export default function Pricing() {
   const [loading, setLoading] = useState(false)
