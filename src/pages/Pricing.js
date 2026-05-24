@@ -56,8 +56,6 @@ export default function Pricing() {
         >
           {loading ? 'Redirecting...' : 'Start Free Trial 🚀'}
         </button>
-
-        <p style={{ color: '#999', fontSize: '14px', marginTop: '15px' }}>No credit card required for trial</p>
       </div>
     </div>
   )
