@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import ReviewForm from './pages/ReviewForm'
 import Pricing from './pages/Pricing'
 import Notifications from './pages/Notifications'
+import Onboarding from './pages/Onboarding'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/review" element={<ReviewForm />} />
         <Route path="/pricing" element={<Pricing />} />
