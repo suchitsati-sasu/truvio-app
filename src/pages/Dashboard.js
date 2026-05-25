@@ -4,6 +4,7 @@ import { supabase } from '../supabaseClient'
 export default function Dashboard() {
   const [user, setUser] = useState(null)
   const [reviews, setReviews] = useState([])
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -24,6 +25,14 @@ export default function Dashboard() {
 
   const stars = (rating) => '⭐'.repeat(rating)
 
+  const widgetCode = user ? `<script src="https://truvio-app.vercel.app/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(widgetCode)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   return (
     <div style={{ maxWidth: '800px', margin: '50px auto', padding: '40px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
@@ -35,6 +44,22 @@ export default function Dashboard() {
 
       <div style={{ background: '#f8f9fa', padding: '20px', borderRadius: '12px', marginBottom: '30px' }}>
         <p>Welcome back! 👋 <strong>{user?.email}</strong></p>
+      </div>
+
+      <div style={{ background: 'white', border: '2px solid #00c6ff', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
+        <h2 style={{ marginBottom: '8px' }}>🚀 Your FOMO Widget</h2>
+        <p style={{ color: '#666', marginBottom: '16px' }}>Paste this code before the closing &lt;/body&gt; tag on your website:</p>
+        <div style={{ background: '#1a1a2e', borderRadius: '8px', padding: '16px', marginBottom: '12px', overflowX: 'auto' }}>
+          <code style={{ color: '#00c6ff', fontSize: '13px', whiteSpace: 'nowrap' }}>
+            {widgetCode}
+          </code>
+        </div>
+        <button
+          onClick={handleCopy}
+          style={{ padding: '10px 24px', background: copied ? '#00bb77' : '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}
+        >
+          {copied ? '✅ Copied!' : '📋 Copy Code'}
+        </button>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
