@@ -12,30 +12,77 @@ const TEMPLATES = {
 
 const REGIONS = {
   europe: {
-    names: ['Anna', 'Janis', 'Liga', 'Marta', 'Peters', 'Sophie', 'James', 'Emma', 'Oliver', 'Lena', 'Felix', 'Hannah', 'Lukas', 'Camille', 'Lucas', 'Sem', 'Julia', 'Daan', 'Lotte', 'Lars'],
-    keywords: ['riga', 'latvia', 'london', 'uk', 'england', 'berlin', 'germany', 'paris', 'france', 'amsterdam', 'netherlands', 'madrid', 'spain', 'rome', 'italy', 'vienna', 'austria', 'warsaw', 'poland', 'stockholm', 'sweden', 'oslo', 'norway', 'copenhagen', 'denmark', 'helsinki', 'finland', 'zurich', 'switzerland', 'brussels', 'belgium', 'lisbon', 'portugal', 'prague', 'czech', 'budapest', 'hungary', 'bucharest', 'romania', 'sofia', 'bulgaria', 'athens', 'greece', 'zagreb', 'croatia', 'europe']
+    names: ['Anna', 'Janis', 'Liga', 'Marta', 'Peters', 'Sophie', 'James', 'Emma', 'Oliver', 'Lena', 'Felix', 'Hannah', 'Lukas', 'Camille', 'Lucas', 'Sem', 'Julia', 'Daan', 'Lotte', 'Lars', 'Marie', 'Leon', 'Elina', 'Karlis', 'Ilze'],
+    keywords: ['riga', 'latvia', 'london', 'uk', 'england', 'berlin', 'germany', 'paris', 'france', 'amsterdam', 'netherlands', 'madrid', 'spain', 'rome', 'italy', 'vienna', 'austria', 'warsaw', 'poland', 'stockholm', 'sweden', 'oslo', 'norway', 'copenhagen', 'denmark', 'helsinki', 'finland', 'zurich', 'switzerland', 'brussels', 'belgium', 'lisbon', 'portugal', 'prague', 'czech', 'budapest', 'hungary', 'bucharest', 'romania', 'sofia', 'bulgaria', 'athens', 'greece', 'zagreb', 'croatia', 'europe', 'salzburg', 'graz', 'innsbruck', 'munich', 'hamburg', 'frankfurt', 'cologne', 'milan', 'florence', 'barcelona', 'seville', 'lyon', 'marseille'],
+    nearbyCities: {
+      'vienna': ['Salzburg', 'Graz', 'Innsbruck', 'Linz', 'Klagenfurt'],
+      'riga': ['Jurmala', 'Ogre', 'Salaspils', 'Sigulda', 'Jelgava'],
+      'london': ['Greenwich', 'Hackney', 'Brixton', 'Shoreditch', 'Richmond'],
+      'berlin': ['Potsdam', 'Mitte', 'Kreuzberg', 'Prenzlauer Berg', 'Spandau'],
+      'paris': ['Versailles', 'Montmartre', 'Marais', 'Belleville', 'Saint-Denis'],
+      'amsterdam': ['Haarlem', 'Utrecht', 'Leiden', 'Delft', 'Rotterdam'],
+      'madrid': ['Toledo', 'Segovia', 'Alcala', 'Getafe', 'Leganes'],
+      'rome': ['Vatican', 'Tivoli', 'Ostia', 'Frascati', 'Albano'],
+      'barcelona': ['Badalona', 'Sabadell', 'Terrassa', 'Hospitalet', 'Mataro'],
+      'munich': ['Augsburg', 'Ingolstadt', 'Regensburg', 'Freising', 'Landshut'],
+      'milan': ['Monza', 'Bergamo', 'Brescia', 'Pavia', 'Como'],
+      'warsaw': ['Lodz', 'Krakow', 'Poznan', 'Gdansk', 'Wroclaw'],
+      'stockholm': ['Uppsala', 'Vasteras', 'Orebro', 'Linkoping', 'Norrkoping'],
+    }
   },
   south_asia: {
     names: ['Priya', 'Rahul', 'Aditi', 'Rohan', 'Pooja', 'Amit', 'Neha', 'Vikram', 'Anjali', 'Karan', 'Divya', 'Arjun', 'Sneha', 'Aditya', 'Meera', 'Ishaan', 'Riya', 'Aarav', 'Ananya', 'Karthik'],
-    keywords: ['mumbai', 'delhi', 'bangalore', 'india', 'kolkata', 'chennai', 'hyderabad', 'pune', 'ahmedabad', 'jaipur', 'lucknow', 'karachi', 'pakistan', 'dhaka', 'bangladesh', 'colombo', 'sri lanka', 'kathmandu', 'nepal']
+    keywords: ['mumbai', 'delhi', 'bangalore', 'india', 'kolkata', 'chennai', 'hyderabad', 'pune', 'ahmedabad', 'jaipur', 'karachi', 'pakistan', 'dhaka', 'bangladesh', 'colombo', 'sri lanka', 'kathmandu', 'nepal'],
+    nearbyCities: {
+      'mumbai': ['Andheri', 'Bandra', 'Juhu', 'Thane', 'Borivali'],
+      'delhi': ['Connaught Place', 'Lajpat Nagar', 'Hauz Khas', 'Dwarka', 'Noida'],
+      'bangalore': ['Koramangala', 'Indiranagar', 'Whitefield', 'HSR Layout', 'Jayanagar'],
+      'pune': ['Kothrud', 'Hinjewadi', 'Baner', 'Koregaon Park', 'Viman Nagar'],
+      'chennai': ['Adyar', 'Anna Nagar', 'T Nagar', 'Mylapore', 'Velachery'],
+      'hyderabad': ['Banjara Hills', 'Jubilee Hills', 'Gachibowli', 'Madhapur', 'Kukatpally'],
+    }
   },
   middle_east: {
     names: ['Mohammed', 'Fatima', 'Ahmed', 'Aisha', 'Omar', 'Sara', 'Ali', 'Nour', 'Hassan', 'Layla', 'Khalid', 'Maryam', 'Yusuf', 'Hana', 'Ibrahim'],
-    keywords: ['dubai', 'abu dhabi', 'uae', 'saudi', 'riyadh', 'jeddah', 'kuwait', 'qatar', 'doha', 'bahrain', 'muscat', 'oman', 'beirut', 'lebanon', 'amman', 'jordan', 'cairo', 'egypt', 'middle east']
+    keywords: ['dubai', 'abu dhabi', 'uae', 'saudi', 'riyadh', 'jeddah', 'kuwait', 'qatar', 'doha', 'bahrain', 'muscat', 'oman', 'beirut', 'lebanon', 'amman', 'jordan', 'cairo', 'egypt'],
+    nearbyCities: {
+      'dubai': ['Dubai Marina', 'Downtown Dubai', 'Jumeirah', 'Deira', 'Business Bay'],
+      'riyadh': ['Al Malaz', 'Al Olaya', 'Al Sulaimaniyah', 'Diriyah', 'Al Rawdah'],
+      'cairo': ['Zamalek', 'Maadi', 'Heliopolis', 'Nasr City', 'New Cairo'],
+    }
   },
   east_asia: {
     names: ['Wei', 'Yuki', 'Min', 'Sakura', 'Hiroshi', 'Ji', 'Mei', 'Kenji', 'Soo', 'Yuna', 'Taro', 'Hana', 'Ryu', 'Mio', 'Park'],
-    keywords: ['tokyo', 'japan', 'beijing', 'shanghai', 'china', 'seoul', 'korea', 'taipei', 'taiwan', 'hong kong', 'singapore', 'bangkok', 'thailand', 'jakarta', 'indonesia', 'manila', 'philippines', 'kuala lumpur', 'malaysia', 'east asia', 'asia']
+    keywords: ['tokyo', 'japan', 'beijing', 'shanghai', 'china', 'seoul', 'korea', 'taipei', 'taiwan', 'hong kong', 'singapore', 'bangkok', 'thailand', 'jakarta', 'indonesia', 'manila', 'philippines', 'kuala lumpur', 'malaysia'],
+    nearbyCities: {
+      'tokyo': ['Yokohama', 'Kawasaki', 'Saitama', 'Chiba', 'Osaka'],
+      'beijing': ['Tianjin', 'Hebei', 'Langfang', 'Baoding', 'Zhangjiakou'],
+      'seoul': ['Incheon', 'Suwon', 'Seongnam', 'Goyang', 'Bucheon'],
+      'singapore': ['Jurong', 'Tampines', 'Woodlands', 'Ang Mo Kio', 'Bedok'],
+    }
   },
   africa: {
     names: ['Amara', 'Kwame', 'Zara', 'Kofi', 'Nia', 'Seun', 'Adaeze', 'Chidi', 'Fatou', 'Moussa', 'Amina', 'Yaw', 'Abena', 'Emeka', 'Afia'],
-    keywords: ['nigeria', 'lagos', 'abuja', 'ghana', 'accra', 'kenya', 'nairobi', 'south africa', 'johannesburg', 'cape town', 'ethiopia', 'addis ababa', 'tanzania', 'dar es salaam', 'senegal', 'dakar', 'cameroon', 'ivory coast', 'africa']
+    keywords: ['nigeria', 'lagos', 'abuja', 'ghana', 'accra', 'kenya', 'nairobi', 'south africa', 'johannesburg', 'cape town', 'ethiopia', 'addis ababa', 'tanzania', 'senegal', 'dakar', 'africa'],
+    nearbyCities: {
+      'lagos': ['Ikeja', 'Victoria Island', 'Lekki', 'Surulere', 'Yaba'],
+      'nairobi': ['Westlands', 'Karen', 'Eastleigh', 'Kibera', 'Kasarani'],
+      'johannesburg': ['Sandton', 'Soweto', 'Randburg', 'Midrand', 'Pretoria'],
+    }
   },
   americas: {
     names: ['Carlos', 'Emma', 'Lucas', 'Sofia', 'Mateo', 'Isabella', 'Sebastian', 'Valentina', 'Liam', 'Olivia', 'Noah', 'Ava', 'William', 'Charlotte', 'James'],
-    keywords: ['new york', 'usa', 'america', 'los angeles', 'chicago', 'houston', 'toronto', 'canada', 'vancouver', 'montreal', 'mexico', 'mexico city', 'sao paulo', 'brazil', 'rio', 'buenos aires', 'argentina', 'bogota', 'colombia', 'lima', 'peru', 'santiago', 'chile']
+    keywords: ['new york', 'usa', 'america', 'los angeles', 'chicago', 'houston', 'toronto', 'canada', 'vancouver', 'montreal', 'mexico', 'sao paulo', 'brazil', 'rio', 'buenos aires', 'argentina', 'bogota', 'colombia', 'lima', 'peru', 'santiago', 'chile'],
+    nearbyCities: {
+      'new york': ['Brooklyn', 'Queens', 'Bronx', 'Jersey City', 'Newark'],
+      'toronto': ['Mississauga', 'Brampton', 'Scarborough', 'North York', 'Etobicoke'],
+      'sao paulo': ['Guarulhos', 'Santo Andre', 'Osasco', 'Campinas', 'Santos'],
+      'los angeles': ['Hollywood', 'Santa Monica', 'Pasadena', 'Long Beach', 'Burbank'],
+    }
   }
 }
+
+const OTHER_EUROPEAN_CITIES = ['London', 'Paris', 'Berlin', 'Amsterdam', 'Madrid', 'Rome', 'Barcelona', 'Munich', 'Warsaw', 'Stockholm', 'Oslo', 'Copenhagen', 'Helsinki', 'Zurich', 'Brussels', 'Lisbon', 'Prague', 'Budapest', 'Vienna', 'Milan']
 
 const TIMES = ['just now', '1 min ago', '2 mins ago', '3 mins ago', '5 mins ago', '8 mins ago', '10 mins ago']
 
@@ -46,7 +93,16 @@ function detectRegion(city) {
       return region
     }
   }
-  return 'europe' // default
+  return 'europe'
+}
+
+function getNearbyCities(city, region) {
+  const cityLower = city.toLowerCase()
+  const regionData = REGIONS[region]
+  for (const [key, cities] of Object.entries(regionData.nearbyCities || {})) {
+    if (cityLower.includes(key)) return cities
+  }
+  return null
 }
 
 function generateNotifications(businessType, city) {
@@ -54,12 +110,29 @@ function generateNotifications(businessType, city) {
   const region = detectRegion(city)
   const names = REGIONS[region].names
   const actions = TEMPLATES[businessType] || TEMPLATES.other
+  const nearbyCities = getNearbyCities(city, region)
 
   for (let i = 0; i < 150; i++) {
     const name = names[Math.floor(Math.random() * names.length)]
     const action = actions[Math.floor(Math.random() * actions.length)]
     const time = TIMES[Math.floor(Math.random() * TIMES.length)]
-    notifications.push(`${name} from ${city} ${action} — ${time}`)
+
+    const rand = Math.random()
+    let fromCity
+
+    if (rand < 0.75) {
+      // 75% same city
+      fromCity = city
+    } else if (rand < 0.80 && nearbyCities) {
+      // 5% nearby cities
+      fromCity = nearbyCities[Math.floor(Math.random() * nearbyCities.length)]
+    } else {
+      // 20% other European/global cities
+      const otherCities = OTHER_EUROPEAN_CITIES.filter(c => c.toLowerCase() !== city.toLowerCase())
+      fromCity = otherCities[Math.floor(Math.random() * otherCities.length)]
+    }
+
+    notifications.push(`${name} from ${fromCity} ${action} — ${time}`)
   }
 
   return notifications.sort(() => Math.random() - 0.5)
@@ -95,9 +168,14 @@ export default function Notifications() {
     }
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
+
+    // Delete old notifications first
+    await supabase.from('notifications').delete().eq('user_id', user.id)
+
     const msgs = generateNotifications(businessType, city)
     const rows = msgs.map(msg => ({ user_id: user.id, message: msg, is_active: true }))
     const { error } = await supabase.from('notifications').insert(rows)
+
     if (error) {
       setMessage('Error: ' + error.message)
     } else {
@@ -153,7 +231,7 @@ export default function Notifications() {
             <input
               value={city}
               onChange={e => { setCity(e.target.value); setGenerated(false) }}
-              placeholder="e.g. Riga, Mumbai, Dubai, London..."
+              placeholder="e.g. Riga, Mumbai, Dubai..."
               style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px', width: '200px' }}
             />
           </div>
