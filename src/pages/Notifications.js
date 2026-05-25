@@ -1,72 +1,65 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 
-const NOTIFICATION_TEMPLATES = {
-  european: {
-    names: ['Anna', 'Maria', 'Janis', 'Liga', 'Marta', 'Peters', 'Elina', 'Karlis', 'Ilze', 'Andris', 'Sophie', 'Lucas', 'Emma', 'Noah', 'Olivia', 'Liam', 'Isabella', 'Oliver', 'Ava', 'Elijah', 'Mia', 'James', 'Charlotte', 'Aiden', 'Amelia'],
-    cities: {
-      'Riga': ['Riga', 'Jurmala', 'Ogre', 'Salaspils', 'Sigulda'],
-      'London': ['London', 'Greenwich', 'Hackney', 'Brixton', 'Shoreditch'],
-      'Berlin': ['Berlin', 'Mitte', 'Prenzlauer Berg', 'Kreuzberg', 'Friedrichshain'],
-      'Paris': ['Paris', 'Montmartre', 'Marais', 'Belleville', 'Bastille'],
-      'Amsterdam': ['Amsterdam', 'Jordaan', 'De Pijp', 'Centrum', 'Oost'],
-    }
+const TEMPLATES = {
+  salon: ['just booked a haircut! ✂️', 'just booked a blow dry! 💇', 'just booked a hair color! 🎨', 'just booked a manicure! 💅', 'just booked a facial! ✨', 'left a 5★ review! ⭐', 'just booked an appointment! 📅', 'loved the service! 😍'],
+  cafe: ['just visited! 😊', 'left a 5★ review! ⭐', 'just placed an order! 🛍️', 'just checked in! 📍', 'loved the experience! 😍', 'recommended this place! 👍', 'just made a reservation! 📅', 'had an amazing time! 🎉'],
+  ecommerce: ['just purchased! 🛍️', 'just placed an order! 📦', 'left a 5★ review! ⭐', 'just bought this! 🔥', 'added to cart! 🛒', 'loved the product! 😍'],
+  fitness: ['just booked a class! 💪', 'just joined! 🏋️', 'left a 5★ review! ⭐', 'just completed a session! ✅', 'loved the workout! 🔥'],
+  clinic: ['just booked an appointment! 📅', 'left a 5★ review! ⭐', 'just checked in! 📍', 'loved the service! 😍', 'highly recommended! 👍'],
+  other: ['just visited! 😊', 'just signed up! 🎉', 'left a 5★ review! ⭐', 'just joined! ✅', 'loved the experience! 😍', 'highly recommended! 👍']
+}
+
+const REGIONS = {
+  europe: {
+    names: ['Anna', 'Janis', 'Liga', 'Marta', 'Peters', 'Sophie', 'James', 'Emma', 'Oliver', 'Lena', 'Felix', 'Hannah', 'Lukas', 'Camille', 'Lucas', 'Sem', 'Julia', 'Daan', 'Lotte', 'Lars'],
+    keywords: ['riga', 'latvia', 'london', 'uk', 'england', 'berlin', 'germany', 'paris', 'france', 'amsterdam', 'netherlands', 'madrid', 'spain', 'rome', 'italy', 'vienna', 'austria', 'warsaw', 'poland', 'stockholm', 'sweden', 'oslo', 'norway', 'copenhagen', 'denmark', 'helsinki', 'finland', 'zurich', 'switzerland', 'brussels', 'belgium', 'lisbon', 'portugal', 'prague', 'czech', 'budapest', 'hungary', 'bucharest', 'romania', 'sofia', 'bulgaria', 'athens', 'greece', 'zagreb', 'croatia', 'europe']
   },
-  indian: {
-    names: ['Priya', 'Rahul', 'Anjali', 'Amit', 'Pooja', 'Raj', 'Neha', 'Vikram', 'Sunita', 'Arjun', 'Divya', 'Karan', 'Meera', 'Rohan', 'Sneha', 'Aditya', 'Kavya', 'Nikhil', 'Ishaan', 'Riya'],
-    cities: {
-      'Mumbai': ['Andheri', 'Bandra', 'Juhu', 'Thane', 'Borivali'],
-      'Delhi': ['Connaught Place', 'Lajpat Nagar', 'Hauz Khas', 'Dwarka', 'Rohini'],
-      'Bangalore': ['Koramangala', 'Indiranagar', 'Whitefield', 'HSR Layout', 'Jayanagar'],
-    }
+  south_asia: {
+    names: ['Priya', 'Rahul', 'Aditi', 'Rohan', 'Pooja', 'Amit', 'Neha', 'Vikram', 'Anjali', 'Karan', 'Divya', 'Arjun', 'Sneha', 'Aditya', 'Meera', 'Ishaan', 'Riya', 'Aarav', 'Ananya', 'Karthik'],
+    keywords: ['mumbai', 'delhi', 'bangalore', 'india', 'kolkata', 'chennai', 'hyderabad', 'pune', 'ahmedabad', 'jaipur', 'lucknow', 'karachi', 'pakistan', 'dhaka', 'bangladesh', 'colombo', 'sri lanka', 'kathmandu', 'nepal']
+  },
+  middle_east: {
+    names: ['Mohammed', 'Fatima', 'Ahmed', 'Aisha', 'Omar', 'Sara', 'Ali', 'Nour', 'Hassan', 'Layla', 'Khalid', 'Maryam', 'Yusuf', 'Hana', 'Ibrahim'],
+    keywords: ['dubai', 'abu dhabi', 'uae', 'saudi', 'riyadh', 'jeddah', 'kuwait', 'qatar', 'doha', 'bahrain', 'muscat', 'oman', 'beirut', 'lebanon', 'amman', 'jordan', 'cairo', 'egypt', 'middle east']
+  },
+  east_asia: {
+    names: ['Wei', 'Yuki', 'Min', 'Sakura', 'Hiroshi', 'Ji', 'Mei', 'Kenji', 'Soo', 'Yuna', 'Taro', 'Hana', 'Ryu', 'Mio', 'Park'],
+    keywords: ['tokyo', 'japan', 'beijing', 'shanghai', 'china', 'seoul', 'korea', 'taipei', 'taiwan', 'hong kong', 'singapore', 'bangkok', 'thailand', 'jakarta', 'indonesia', 'manila', 'philippines', 'kuala lumpur', 'malaysia', 'east asia', 'asia']
+  },
+  africa: {
+    names: ['Amara', 'Kwame', 'Zara', 'Kofi', 'Nia', 'Seun', 'Adaeze', 'Chidi', 'Fatou', 'Moussa', 'Amina', 'Yaw', 'Abena', 'Emeka', 'Afia'],
+    keywords: ['nigeria', 'lagos', 'abuja', 'ghana', 'accra', 'kenya', 'nairobi', 'south africa', 'johannesburg', 'cape town', 'ethiopia', 'addis ababa', 'tanzania', 'dar es salaam', 'senegal', 'dakar', 'cameroon', 'ivory coast', 'africa']
+  },
+  americas: {
+    names: ['Carlos', 'Emma', 'Lucas', 'Sofia', 'Mateo', 'Isabella', 'Sebastian', 'Valentina', 'Liam', 'Olivia', 'Noah', 'Ava', 'William', 'Charlotte', 'James'],
+    keywords: ['new york', 'usa', 'america', 'los angeles', 'chicago', 'houston', 'toronto', 'canada', 'vancouver', 'montreal', 'mexico', 'mexico city', 'sao paulo', 'brazil', 'rio', 'buenos aires', 'argentina', 'bogota', 'colombia', 'lima', 'peru', 'santiago', 'chile']
   }
 }
 
-const ACTIONS = [
-  'just booked an appointment! ⭐',
-  'left a 5★ review!',
-  'just signed up!',
-  'loved the service! 😍',
-  'booked a slot! 🎉',
-  'left a glowing review! ⭐⭐⭐⭐⭐',
-  'just visited!',
-  'recommended this place! 👍',
-]
-
 const TIMES = ['just now', '1 min ago', '2 mins ago', '3 mins ago', '5 mins ago', '8 mins ago', '10 mins ago']
 
-function generateNotifications(city) {
+function detectRegion(city) {
+  const cityLower = city.toLowerCase()
+  for (const [region, data] of Object.entries(REGIONS)) {
+    if (data.keywords.some(k => cityLower.includes(k))) {
+      return region
+    }
+  }
+  return 'europe' // default
+}
+
+function generateNotifications(businessType, city) {
   const notifications = []
-  const europeanNames = [...NOTIFICATION_TEMPLATES.european.names]
-  const indianNames = [...NOTIFICATION_TEMPLATES.indian.names]
-  
-  // Find cities list
-  let europeanCities = ['Riga', 'Jurmala', 'Ogre']
-  for (const [key, val] of Object.entries(NOTIFICATION_TEMPLATES.european.cities)) {
-    if (city === key) europeanCities = val
-  }
+  const region = detectRegion(city)
+  const names = REGIONS[region].names
+  const actions = TEMPLATES[businessType] || TEMPLATES.other
 
-  let indianCities = ['Mumbai', 'Delhi', 'Bangalore']
-  for (const [key, val] of Object.entries(NOTIFICATION_TEMPLATES.indian.cities)) {
-    if (city === key) indianCities = val
-  }
-
-  // 130 European
-  for (let i = 0; i < 130; i++) {
-    const name = europeanNames[Math.floor(Math.random() * europeanNames.length)]
-    const fromCity = europeanCities[Math.floor(Math.random() * europeanCities.length)]
-    const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)]
+  for (let i = 0; i < 150; i++) {
+    const name = names[Math.floor(Math.random() * names.length)]
+    const action = actions[Math.floor(Math.random() * actions.length)]
     const time = TIMES[Math.floor(Math.random() * TIMES.length)]
-    notifications.push(`${name} from ${fromCity} ${action} — ${time}`)
-  }
-
-  // 20 Indian
-  for (let i = 0; i < 20; i++) {
-    const name = indianNames[Math.floor(Math.random() * indianNames.length)]
-    const fromCity = indianCities[Math.floor(Math.random() * indianCities.length)]
-    const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)]
-    const time = TIMES[Math.floor(Math.random() * TIMES.length)]
-    notifications.push(`${name} from ${fromCity} ${action} — ${time}`)
+    notifications.push(`${name} from ${city} ${action} — ${time}`)
   }
 
   return notifications.sort(() => Math.random() - 0.5)
@@ -75,7 +68,8 @@ function generateNotifications(city) {
 export default function Notifications() {
   const [notifications, setNotifications] = useState([])
   const [newMessage, setNewMessage] = useState('')
-  const [city, setCity] = useState('Riga')
+  const [businessType, setBusinessType] = useState('salon')
+  const [city, setCity] = useState('')
   const [loading, setLoading] = useState(false)
   const [generated, setGenerated] = useState(false)
   const [message, setMessage] = useState('')
@@ -95,18 +89,19 @@ export default function Notifications() {
   }
 
   const handleGenerate = async () => {
+    if (!city.trim()) {
+      setMessage('⚠️ Please enter your city first!')
+      return
+    }
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
-    const msgs = generateNotifications(city)
-    
+    const msgs = generateNotifications(businessType, city)
     const rows = msgs.map(msg => ({ user_id: user.id, message: msg, is_active: true }))
-    
     const { error } = await supabase.from('notifications').insert(rows)
-    
     if (error) {
       setMessage('Error: ' + error.message)
     } else {
-      setMessage(`✅ ${msgs.length} notifications generated!`)
+      setMessage(`✅ 150 notifications generated for ${businessType} in ${city}!`)
       setGenerated(true)
       fetchNotifications()
     }
@@ -117,13 +112,9 @@ export default function Notifications() {
     if (!newMessage.trim()) return
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
-    
     await supabase.from('notifications').insert({
-      user_id: user.id,
-      message: newMessage,
-      is_active: true
+      user_id: user.id, message: newMessage, is_active: true
     })
-    
     setNewMessage('')
     setMessage('✅ Notification added!')
     fetchNotifications()
@@ -138,76 +129,57 @@ export default function Notifications() {
   return (
     <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>
       <h1 style={{ fontSize: '28px', marginBottom: '10px' }}>🔔 FOMO Notifications</h1>
-      <p style={{ color: '#666', marginBottom: '30px' }}>Manage notifications shown on your widget</p>
+      <p style={{ color: '#666', marginBottom: '30px' }}>Customized for your business type and location</p>
 
-      {/* Generate Section */}
       <div style={{ background: '#f0f9ff', border: '2px solid #00c6ff', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
         <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>⚡ Auto-Generate 150 Notifications</h2>
-        
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
+
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '16px', flexWrap: 'wrap' }}>
           <div>
-            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Your City/Region:</label>
-            <select
-              value={city}
-              onChange={e => setCity(e.target.value)}
-              style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px' }}
-            >
-              <optgroup label="🇱🇻 Latvia">
-                <option value="Riga">Riga</option>
-              </optgroup>
-              <optgroup label="🇬🇧 UK">
-                <option value="London">London</option>
-              </optgroup>
-              <optgroup label="🇩🇪 Germany">
-                <option value="Berlin">Berlin</option>
-              </optgroup>
-              <optgroup label="🇫🇷 France">
-                <option value="Paris">Paris</option>
-              </optgroup>
-              <optgroup label="🇳🇱 Netherlands">
-                <option value="Amsterdam">Amsterdam</option>
-              </optgroup>
-              <optgroup label="🇮🇳 India">
-                <option value="Mumbai">Mumbai</option>
-                <option value="Delhi">Delhi</option>
-                <option value="Bangalore">Bangalore</option>
-              </optgroup>
+            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Business Type:</label>
+            <select value={businessType} onChange={e => { setBusinessType(e.target.value); setGenerated(false) }}
+              style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px' }}>
+              <option value="salon">💇 Salon / Spa</option>
+              <option value="cafe">☕ Cafe / Bar / Restaurant</option>
+              <option value="ecommerce">🛍️ eCommerce / Shopify</option>
+              <option value="fitness">🏋️ Gym / Fitness</option>
+              <option value="clinic">🏥 Clinic / Doctor</option>
+              <option value="other">🏪 Other Business</option>
             </select>
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Your City:</label>
+            <input
+              value={city}
+              onChange={e => { setCity(e.target.value); setGenerated(false) }}
+              placeholder="e.g. Riga, Mumbai, Dubai, London..."
+              style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px', width: '200px' }}
+            />
           </div>
         </div>
 
-        <button
-          onClick={handleGenerate}
-          disabled={loading || generated}
-          style={{ padding: '12px 24px', background: generated ? '#ccc' : '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', cursor: generated ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
-        >
+        <button onClick={handleGenerate} disabled={loading || generated}
+          style={{ padding: '12px 24px', background: generated ? '#ccc' : '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', cursor: generated ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}>
           {loading ? 'Generating...' : generated ? '✅ Already Generated' : '⚡ Generate 150 Notifications'}
         </button>
-        
-        {message && <p style={{ marginTop: '12px', color: '#00c6ff', fontWeight: 'bold' }}>{message}</p>}
+
+        {message && <p style={{ marginTop: '12px', color: message.includes('⚠️') ? 'orange' : '#00c6ff', fontWeight: 'bold' }}>{message}</p>}
       </div>
 
-      {/* Add Custom */}
       <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
         <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>✏️ Add Custom Notification</h2>
         <div style={{ display: 'flex', gap: '12px' }}>
-          <input
-            value={newMessage}
-            onChange={e => setNewMessage(e.target.value)}
-            placeholder="e.g. Sara just booked a haircut! ⭐"
-            style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px' }}
-          />
-          <button
-            onClick={handleAdd}
-            disabled={loading}
-            style={{ padding: '10px 20px', background: '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', cursor: 'pointer', fontWeight: 'bold' }}
-          >
+          <input value={newMessage} onChange={e => setNewMessage(e.target.value)}
+            placeholder="e.g. Sara just booked a haircut! ✂️"
+            style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px' }} />
+          <button onClick={handleAdd} disabled={loading}
+            style={{ padding: '10px 20px', background: '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', cursor: 'pointer', fontWeight: 'bold' }}>
             Add
           </button>
         </div>
       </div>
 
-      {/* Notifications List */}
       <div style={{ background: '#fff', border: '1px solid #eee', borderRadius: '12px', padding: '24px' }}>
         <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>📋 Your Notifications ({notifications.length})</h2>
         {notifications.length === 0 ? (
@@ -217,10 +189,8 @@ export default function Notifications() {
             {notifications.map(n => (
               <div key={n.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', borderBottom: '1px solid #f0f0f0' }}>
                 <span style={{ fontSize: '14px' }}>{n.message}</span>
-                <button
-                  onClick={() => handleDelete(n.id)}
-                  style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', fontSize: '18px' }}
-                >
+                <button onClick={() => handleDelete(n.id)}
+                  style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', fontSize: '18px' }}>
                   🗑️
                 </button>
               </div>
