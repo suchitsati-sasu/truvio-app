@@ -14,6 +14,59 @@ const BUSINESS_TYPES = [
   { value: 'other', label: '🏢 Other Business' },
 ]
 
+function generateNotifications(businessType, city, street, userId) {
+  const salonNames = ['Anna','Mia','Laura','Sofia','Emma','Lena','Sara','Nina','Eva','Zara','Alisa','Diana','Kate','Julia','Maria']
+  const cafeNames = ['Janis','Karlis','Andris','Peteris','Maris','Roberts','Edgars','Arnis','Uldis','Gints']
+  const indianNames = ['Priya','Rahul','Anita','Vikram','Pooja','Amit','Sneha','Raj','Neha','Arjun']
+  const euNames = ['Sophie','Lucas','Emma','Noah','Olivia','Liam','Isabella','Ethan','Mia','James']
+
+  const allNames = [...salonNames, ...cafeNames, ...indianNames, ...euNames]
+
+  const cityNearby = { 'Riga': ['Jurmala','Ogre'], 'Mumbai': ['Pune','Thane'], 'London': ['Oxford','Brighton'] }
+  const euCities = ['Berlin','Paris','Amsterdam','Warsaw','Prague','Vienna']
+
+  const actions = {
+    salon: ['just made a booking! 💇', 'just reserved a slot! ✨', 'just booked an appointment! 🌟', 'just secured a spot! 💅', 'just scheduled a visit! 🌸'],
+    cafe: ['just placed an order! ☕', 'just made a reservation! 🍽️', 'just booked a table! ✨', 'just placed a takeaway order! 🥡', 'just made a booking! 😊'],
+    ecommerce: ['just placed an order! 🛍️', 'just made a purchase! ✨', 'just checked out! 🎉', 'just bought something! 💫', 'just completed an order! 🛒'],
+    fitness: ['just booked a session! 💪', 'just reserved a spot! 🏋️', 'just signed up! 🔥', 'just made a booking! ⚡', 'just secured a slot! 🌟'],
+    clinic: ['just booked an appointment! 🏥', 'just scheduled a visit! 📅', 'just reserved a slot! ✅', 'just made a booking! 💙', 'just confirmed an appointment! 🌟'],
+    shop: ['just placed an order! 🛍️', 'just made a purchase! ✨', 'just bought something! 🎉', 'just completed a purchase! 💫', 'just shopped! 😊'],
+    services: ['just made a booking! 🔧', 'just scheduled a service! ✅', 'just booked an appointment! 🌟', 'just reserved a slot! 💫', 'just confirmed a booking! 😊'],
+    education: ['just enrolled! 🎓', 'just booked a session! 📚', 'just registered! ✨', 'just signed up! 🌟', 'just secured a spot! 💡'],
+    other: ['just made a booking! 🌟', 'just placed an order! ✨', 'just visited! 😊', 'just signed up! 🎉', 'just confirmed a booking! 💫'],
+  }
+
+  const typeActions = actions[businessType] || actions['other']
+  const notifications = []
+
+  for (let i = 0; i < 150; i++) {
+    const name = allNames[Math.floor(Math.random() * allNames.length)]
+    const action = typeActions[Math.floor(Math.random() * typeActions.length)]
+
+    let location
+    const rand = Math.random()
+    if (rand < 0.75) {
+      location = street ? `${street}, ${city}` : city
+    } else if (rand < 0.80) {
+      const nearby = cityNearby[city] || [city]
+      location = nearby[Math.floor(Math.random() * nearby.length)]
+    } else {
+      location = euCities[Math.floor(Math.random() * euCities.length)]
+    }
+
+    const minsAgo = Math.floor(Math.random() * 1440)
+    notifications.push({
+      user_id: userId,
+      message: `${name} from ${location} ${action}`,
+      business_type: businessType,
+      created_at: new Date(Date.now() - minsAgo * 60000).toISOString(),
+    })
+  }
+
+  return notifications
+}
+
 export default function Onboarding() {
   const navigate = useNavigate()
   const [step, setStep] = useState(1)
@@ -45,12 +98,14 @@ export default function Onboarding() {
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Save profile
     await supabase.from('profiles').upsert({
       id: user.id,
       ...form,
       onboarding_done: true,
     })
+
+    const notifications = generateNotifications(form.business_type, form.city, form.street, user.id)
+    await supabase.from('notifications').insert(notifications)
 
     navigate('/dashboard')
     setLoading(false)
@@ -69,14 +124,12 @@ export default function Onboarding() {
   return (
     <div style={{ maxWidth: '500px', margin: '60px auto', padding: '40px', background: 'white', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
       
-      {/* Progress bar */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
         {[1, 2, 3, 4].map(s => (
           <div key={s} style={{ flex: 1, height: '4px', borderRadius: '2px', background: s <= step ? '#00c6ff' : '#e0e0e0' }} />
         ))}
       </div>
 
-      {/* Step 1 — Business Name */}
       {step === 1 && (
         <div>
           <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>👋 Welcome!</h2>
@@ -91,7 +144,6 @@ export default function Onboarding() {
         </div>
       )}
 
-      {/* Step 2 — Business Type */}
       {step === 2 && (
         <div>
           <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>🏢 Business Type</h2>
@@ -118,12 +170,10 @@ export default function Onboarding() {
         </div>
       )}
 
-      {/* Step 3 — Location */}
       {step === 3 && (
         <div>
           <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>📍 Your Location</h2>
           <p style={{ color: '#666', marginBottom: '24px' }}>We'll use this to generate local notifications.</p>
-          
           <label style={{ fontWeight: 'bold' }}>City *</label>
           <input
             style={inputStyle}
@@ -131,7 +181,6 @@ export default function Onboarding() {
             value={form.city}
             onChange={e => setForm({ ...form, city: e.target.value })}
           />
-
           <label style={{ fontWeight: 'bold', display: 'block', marginTop: '16px' }}>Street / Area <span style={{ color: '#999', fontWeight: 'normal' }}>(optional)</span></label>
           <input
             style={inputStyle}
@@ -143,13 +192,11 @@ export default function Onboarding() {
         </div>
       )}
 
-      {/* Step 4 — Ready */}
       {step === 4 && (
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '64px', marginBottom: '16px' }}>🎉</div>
           <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>You're all set!</h2>
           <p style={{ color: '#666', marginBottom: '24px' }}>We'll generate 150 customized notifications for <strong>{form.business_name}</strong> in <strong>{form.city}</strong>.</p>
-          
           <div style={{ background: '#f0f9ff', borderRadius: '12px', padding: '16px', marginBottom: '24px', textAlign: 'left' }}>
             <div>🏢 <strong>{form.business_name}</strong></div>
             <div style={{ marginTop: '8px' }}>📊 {BUSINESS_TYPES.find(b => b.value === form.business_type)?.label}</div>
@@ -158,7 +205,6 @@ export default function Onboarding() {
         </div>
       )}
 
-      {/* Buttons */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '32px' }}>
         {step > 1 && (
           <button

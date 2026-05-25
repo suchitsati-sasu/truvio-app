@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
 
 export default function Signup() {
@@ -6,21 +7,25 @@ export default function Signup() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
   const handleSignup = async (e) => {
     e.preventDefault()
     setLoading(true)
     setMessage('')
     const { error } = await supabase.auth.signUp({ email, password })
-    if (error) setMessage(error.message)
-    else setMessage('Account created! You can now login.')
-    setLoading(false)
+    if (error) {
+      setMessage(error.message)
+      setLoading(false)
+    } else {
+      navigate('/onboarding')
+    }
   }
 
   return (
     <div style={{ maxWidth: '400px', margin: '100px auto', padding: '40px', boxShadow: '0 0 20px rgba(0,0,0,0.1)', borderRadius: '12px' }}>
       <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Truvio Sign Up</h2>
-      {message && <p style={{ color: 'green', textAlign: 'center' }}>{message}</p>}
+      {message && <p style={{ color: 'red', textAlign: 'center' }}>{message}</p>}
       <form onSubmit={handleSignup}>
         <input
           type="email"
