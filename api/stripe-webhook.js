@@ -39,10 +39,15 @@ export default async function handler(req, res) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
     const userId = session.metadata?.userId
+    const customerId = session.customer
     if (userId) {
       await supabase
         .from('profiles')
-        .update({ is_subscribed: true, subscription_status: 'active' })
+        .update({ 
+          is_subscribed: true, 
+          subscription_status: 'active',
+          stripe_customer_id: customerId
+        })
         .eq('id', userId)
     }
   }
@@ -50,16 +55,10 @@ export default async function handler(req, res) {
   if (event.type === 'customer.subscription.deleted') {
     const subscription = event.data.object
     const customerId = subscription.customer
-    const { data: profiles } = await supabase
+    await supabase
       .from('profiles')
-      .select('id')
+      .update({ is_subscribed: false, subscription_status: 'cancelled' })
       .eq('stripe_customer_id', customerId)
-    if (profiles && profiles.length > 0) {
-      await supabase
-        .from('profiles')
-        .update({ is_subscribed: false, subscription_status: 'cancelled' })
-        .eq('stripe_customer_id', customerId)
-    }
   }
 
   res.json({ received: true })
