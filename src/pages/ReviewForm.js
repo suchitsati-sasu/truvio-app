@@ -9,11 +9,23 @@ export default function ReviewForm() {
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [ownerId, setOwnerId] = useState(null)
+  const [ownerEmail, setOwnerEmail] = useState('')
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const uid = params.get('uid')
-    if (uid) setOwnerId(uid)
+    if (uid) {
+      setOwnerId(uid)
+      // Owner ka email fetch karo
+      supabase
+        .from('profiles')
+        .select('email')
+        .eq('id', uid)
+        .single()
+        .then(({ data }) => {
+          if (data?.email) setOwnerEmail(data.email)
+        })
+    }
   }, [])
 
   const handleSubmit = async (e) => {
@@ -32,7 +44,7 @@ export default function ReviewForm() {
           customerName: name,
           rating: rating,
           reviewText: reviewText,
-          ownerEmail: 'suchitsati@gmail.com'
+          ownerEmail: ownerEmail || 'suchitsati@gmail.com'
         }
       })
       setSubmitted(true)
