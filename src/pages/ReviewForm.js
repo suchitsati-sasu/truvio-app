@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 
 export default function ReviewForm() {
@@ -8,20 +8,25 @@ export default function ReviewForm() {
   const [reviewText, setReviewText] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [ownerId, setOwnerId] = useState(null)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const uid = params.get('uid')
+    if (uid) setOwnerId(uid)
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-
     const { error } = await supabase.from('reviews').insert([{
       customer_name: name,
       customer_email: email,
       rating: rating,
-      review_text: reviewText
+      review_text: reviewText,
+      user_id: ownerId
     }])
-
     if (!error) {
-      // Email bhejo
       await supabase.functions.invoke('send-review-email', {
         body: {
           customerName: name,
