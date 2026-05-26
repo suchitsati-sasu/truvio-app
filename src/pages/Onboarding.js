@@ -101,6 +101,7 @@ export default function Onboarding() {
     await supabase.from('profiles').upsert({
       id: user.id,
       ...form,
+      email: user.email,
       onboarding_done: true,
     })
 
