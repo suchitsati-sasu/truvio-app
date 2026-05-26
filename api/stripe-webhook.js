@@ -47,5 +47,20 @@ export default async function handler(req, res) {
     }
   }
 
+  if (event.type === 'customer.subscription.deleted') {
+    const subscription = event.data.object
+    const customerId = subscription.customer
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('stripe_customer_id', customerId)
+    if (profiles && profiles.length > 0) {
+      await supabase
+        .from('profiles')
+        .update({ is_subscribed: false, subscription_status: 'cancelled' })
+        .eq('stripe_customer_id', customerId)
+    }
+  }
+
   res.json({ received: true })
 }
