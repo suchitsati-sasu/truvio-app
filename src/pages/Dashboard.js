@@ -5,6 +5,7 @@ export default function Dashboard() {
   const [user, setUser] = useState(null)
   const [reviews, setReviews] = useState([])
   const [copied, setCopied] = useState(false)
+  const [reviewLinkCopied, setReviewLinkCopied] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -31,10 +32,18 @@ export default function Dashboard() {
 
   const widgetCode = user ? `<script src="https://truvio-app.vercel.app/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
 
+  const reviewLink = user ? `https://truvio-app.vercel.app/review?uid=${user.id}` : ''
+
   const handleCopy = () => {
     navigator.clipboard.writeText(widgetCode)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleCopyReviewLink = () => {
+    navigator.clipboard.writeText(reviewLink)
+    setReviewLinkCopied(true)
+    setTimeout(() => setReviewLinkCopied(false), 2000)
   }
 
   return (
@@ -63,11 +72,23 @@ export default function Dashboard() {
           {copied ? '✅ Copied!' : '📋 Copy Code'}
         </button>
       </div>
+      <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
+        <h2 style={{ marginBottom: '8px' }}>⭐ Your Review Link</h2>
+        <p style={{ color: '#666', marginBottom: '16px' }}>Share this link with your customers to collect reviews:</p>
+        <div style={{ background: '#f8f9fa', borderRadius: '8px', padding: '16px', marginBottom: '12px', overflowX: 'auto' }}>
+          <code style={{ color: '#333', fontSize: '13px', whiteSpace: 'nowrap' }}>
+            {reviewLink}
+          </code>
+        </div>
+        <button
+          onClick={handleCopyReviewLink}
+          style={{ padding: '10px 24px', background: reviewLinkCopied ? '#00bb77' : '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}
+        >
+          {reviewLinkCopied ? '✅ Copied!' : '📋 Copy Review Link'}
+        </button>
+      </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Reviews ({reviews.length})</h2>
-        <a href="/review" style={{ padding: '10px 20px', background: '#00c6ff', color: 'white', borderRadius: '8px', textDecoration: 'none' }}>
-          + Get Review Link
-        </a>
       </div>
       {reviews.length === 0 ? (
         <p style={{ color: '#718096', textAlign: 'center', padding: '40px' }}>No reviews yet. Share your review link to get started!</p>
