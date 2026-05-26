@@ -10,6 +10,7 @@ module.exports = async (req, res) => {
       payment_method_types: ['card'],
       mode: 'subscription',
       customer_email: email,
+      metadata: { userId },
       line_items: [
         {
           price: process.env.STRIPE_PRICE_ID,
@@ -23,7 +24,6 @@ module.exports = async (req, res) => {
       success_url: `${process.env.REACT_APP_URL}/dashboard?payment=success`,
       cancel_url: `${process.env.REACT_APP_URL}/pricing?payment=cancelled`,
     })
-
     res.json({ url: session.url })
   } catch (err) {
     res.status(500).json({ error: err.message })
