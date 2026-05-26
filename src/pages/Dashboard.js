@@ -9,12 +9,16 @@ export default function Dashboard() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user)
+      if (data.user) fetchReviews(data.user.id)
     })
-    fetchReviews()
   }, [])
 
-  const fetchReviews = async () => {
-    const { data } = await supabase.from('reviews').select('*').order('created_at', { ascending: false })
+  const fetchReviews = async (userId) => {
+    const { data } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
     if (data) setReviews(data)
   }
 
@@ -41,11 +45,9 @@ export default function Dashboard() {
           Logout
         </button>
       </div>
-
       <div style={{ background: '#f8f9fa', padding: '20px', borderRadius: '12px', marginBottom: '30px' }}>
         <p>Welcome back! 👋 <strong>{user?.email}</strong></p>
       </div>
-
       <div style={{ background: 'white', border: '2px solid #00c6ff', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
         <h2 style={{ marginBottom: '8px' }}>🚀 Your FOMO Widget</h2>
         <p style={{ color: '#666', marginBottom: '16px' }}>Paste this code before the closing &lt;/body&gt; tag on your website:</p>
@@ -61,14 +63,12 @@ export default function Dashboard() {
           {copied ? '✅ Copied!' : '📋 Copy Code'}
         </button>
       </div>
-
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Reviews ({reviews.length})</h2>
         <a href="/review" style={{ padding: '10px 20px', background: '#00c6ff', color: 'white', borderRadius: '8px', textDecoration: 'none' }}>
           + Get Review Link
         </a>
       </div>
-
       {reviews.length === 0 ? (
         <p style={{ color: '#718096', textAlign: 'center', padding: '40px' }}>No reviews yet. Share your review link to get started!</p>
       ) : (
