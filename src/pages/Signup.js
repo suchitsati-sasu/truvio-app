@@ -24,7 +24,7 @@ export default function Signup() {
 
   return (
     <div style={{ maxWidth: '400px', margin: '100px auto', padding: '40px', boxShadow: '0 0 20px rgba(0,0,0,0.1)', borderRadius: '12px' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Truvio Sign Up</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Popproof Sign Up</h2>
       {message && <p style={{ color: 'red', textAlign: 'center' }}>{message}</p>}
       <form onSubmit={handleSignup}>
         <input

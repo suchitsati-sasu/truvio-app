@@ -14,7 +14,7 @@ export default function LandingPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif' }}>
       <div style={{ textAlign: 'center', padding: '40px', maxWidth: '600px' }}>
-        <h1 style={{ fontSize: '48px', color: 'white', marginBottom: '20px' }}>Truvio</h1>
+        <h1 style={{ fontSize: '48px', color: 'white', marginBottom: '20px' }}>Popproof</h1>
         <p style={{ fontSize: '20px', color: '#a0aec0', marginBottom: '40px' }}>
           Collect reviews automatically. Build trust. Grow faster.
         </p>

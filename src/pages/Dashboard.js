@@ -52,9 +52,9 @@ export default function Dashboard() {
     return diffDays > 14
   }
 
-  const widgetCode = user ? `<script src="https://truvio-app.vercel.app/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
+  const widgetCode = user ? `<script src="https://Popproof-app.vercel.app/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
 
-  const reviewLink = user ? `https://truvio-app.vercel.app/review?uid=${user.id}` : ''
+  const reviewLink = user ? `https://Popproof-app.vercel.app/review?uid=${user.id}` : ''
 
   const handleCopy = () => {
     navigator.clipboard.writeText(widgetCode)
@@ -73,7 +73,7 @@ export default function Dashboard() {
   return (
     <div style={{ maxWidth: '800px', margin: '50px auto', padding: '40px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-        <h1 style={{ color: '#00c6ff' }}>Truvio Dashboard</h1>
+        <h1 style={{ color: '#00c6ff' }}>Popproof Dashboard</h1>
         <button onClick={handleLogout} style={{ padding: '10px 20px', background: '#ff4444', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
           Logout
         </button>
@@ -96,7 +96,7 @@ export default function Dashboard() {
       {trialExpired ? (
         <div style={{ background: '#fff5f5', border: '2px solid #ff4444', borderRadius: '12px', padding: '30px', marginBottom: '30px', textAlign: 'center' }}>
           <h2 style={{ color: '#ff4444', marginBottom: '12px' }}>⚠️ Your trial has expired!</h2>
-          <p style={{ color: '#666', marginBottom: '20px' }}>Subscribe to continue using Truvio and keep your widget active.</p>
+          <p style={{ color: '#666', marginBottom: '20px' }}>Subscribe to continue using Popproof and keep your widget active.</p>
           <button
             onClick={() => window.location.href = '/pricing'}
             style={{ padding: '12px 30px', background: '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}

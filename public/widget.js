@@ -24,7 +24,7 @@
 
   function createWidget() {
     const widget = document.createElement('div')
-    widget.id = 'truvio-widget'
+    widget.id = 'Popproof-widget'
     widget.style.cssText = `
       position: fixed;
       bottom: 24px;
@@ -58,10 +58,10 @@
       <div>
         <div style="font-weight:600;color:#111">${message}</div>
       </div>
-      <div id="truvio-close" style="margin-left:auto;cursor:pointer;color:#ccc;font-size:18px">×</div>
+      <div id="Popproof-close" style="margin-left:auto;cursor:pointer;color:#ccc;font-size:18px">×</div>
     `
 
-    widget.querySelector('#truvio-close').addEventListener('click', () => {
+    widget.querySelector('#Popproof-close').addEventListener('click', () => {
       hideWidget(widget)
     })
 
