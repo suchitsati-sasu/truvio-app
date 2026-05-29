@@ -97,7 +97,7 @@ function Nav({ onNavigate }) {
       <div style={{ display: 'flex', gap: '22px', alignItems: 'center' }}>
         {[['Features', 'features'], ['Pricing', 'pricing'], ['Stories', 'stories']].map(([label, id]) => (
           <button key={id} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })}
-            style={{ color: 'rgba(255,255,255,0.55)', fontSize: '15px', fontWeight: 700, cursor: 'pointer', background: 'none', border: 'none', fontFamily: "'Comic Neue', cursive" }}
+            style={{ color: 'rgba(255,255,255,0.55)', fontSize: '15px', fontWeight: 700, cursor: 'pointer', background: 'none', border: 'none', fontFamily: "'Bangers', cursive", letterSpacing: '1px' }}
             onMouseEnter={e => e.target.style.color = '#FFE033'}
             onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}
           >{label}</button>
