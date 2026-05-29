@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
 // ============ WIDGET ============
 function FomoWidget() {
@@ -29,6 +29,7 @@ function FomoWidget() {
       }, 350)
     }, 5000)
     return () => clearInterval(interval)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible])
 
   if (!visible) return null
@@ -95,11 +96,11 @@ function Nav({ onNavigate }) {
       </a>
       <div style={{ display: 'flex', gap: '22px', alignItems: 'center' }}>
         {[['Features', 'features'], ['Pricing', 'pricing'], ['Stories', 'stories']].map(([label, id]) => (
-          <a key={id} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })}
+          <button key={id} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })}
             style={{ color: 'rgba(255,255,255,0.55)', fontSize: '13px', fontWeight: 700, textDecoration: 'none', cursor: 'pointer' }}
             onMouseEnter={e => e.target.style.color = '#FFE033'}
             onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}
-          >{label}</a>
+          >{label}</button>
         ))}
       </div>
       <div style={{ display: 'flex', gap: '10px' }}>
@@ -139,10 +140,10 @@ function Hero() {
               onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '5px 5px 0 #111' }}>
               🚀 START FREE TRIAL
             </a>
-            <a onClick={() => document.getElementById('stories')?.scrollIntoView({ behavior: 'smooth' })}
+            <button onClick={() => document.getElementById('stories')?.scrollIntoView({ behavior: 'smooth' })}
               style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', letterSpacing: '1px', padding: '13px 28px', background: 'transparent', color: 'white', border: '3px solid rgba(255,255,255,0.2)', borderRadius: '8px', cursor: 'pointer', textDecoration: 'none', display: 'inline-block' }}>
               📖 SEE HOW IT WORKS
-            </a>
+            </button>
           </div>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ No credit card &nbsp;·&nbsp; ✓ Cancel anytime</p>
         </div>
