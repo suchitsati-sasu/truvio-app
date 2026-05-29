@@ -90,7 +90,7 @@ function ScrollBanner() {
 // ============ NAV ============
 function Nav({ onNavigate }) {
   return (
-    <nav style={{ background: '#0d0a1a', borderBottom: '3px solid #111', padding: '14px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+    <nav style={{ background: '#0d0a1a', borderBottom: '3px solid #111', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, flexWrap: 'wrap', gap: '8px' }}>
       <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '5px', textDecoration: 'none' }}>
         <img src="/popproof-logo.png" alt="Popproof" style={{ height: '34px', objectFit: 'contain' }} />
       </a>
