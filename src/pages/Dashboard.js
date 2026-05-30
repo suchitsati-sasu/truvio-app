@@ -24,7 +24,14 @@ export default function Dashboard() {
       .select('*')
       .eq('id', userId)
       .single()
-    if (data) setProfile(data)
+    if (data) {
+      setProfile(data)
+      if (!data.onboarding_done) {
+        window.location.href = '/onboarding'
+      }
+    } else {
+      window.location.href = '/onboarding'
+    }
   }
 
   const fetchReviews = async (userId) => {
@@ -52,9 +59,9 @@ export default function Dashboard() {
     return diffDays > 14
   }
 
-  const widgetCode = user ? `<script src="https://Popproof-app.vercel.app/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
+  const widgetCode = user ? `<script src="https://popproof.io/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
 
-  const reviewLink = user ? `https://Popproof-app.vercel.app/review?uid=${user.id}` : ''
+  const reviewLink = user ? `https://popproof.io/review?uid=${user.id}` : ''
 
   const handleCopy = () => {
     navigator.clipboard.writeText(widgetCode)
