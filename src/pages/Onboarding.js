@@ -108,7 +108,18 @@ export default function Onboarding() {
     const notifications = generateNotifications(form.business_type, form.city, form.street, user.id)
     await supabase.from('notifications').insert(notifications)
 
-    navigate('/dashboard')
+    // Stripe checkout
+    const res = await fetch('/api/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: user.id, email: user.email }),
+    })
+    const data = await res.json()
+    if (data.url) {
+      window.location.href = data.url
+    } else {
+      navigate('/dashboard')
+    }
     setLoading(false)
   }
 
