@@ -59,8 +59,15 @@ export default function Dashboard() {
     return diffDays > 14
   }
 
-  const widgetCode = user ? `<script src="https://popproof.io/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
+  const trialDaysLeft = () => {
+    if (!profile) return 14
+    const createdAt = new Date(profile.created_at)
+    const now = new Date()
+    const diffDays = (now - createdAt) / (1000 * 60 * 60 * 24)
+    return Math.max(0, 14 - Math.floor(diffDays))
+  }
 
+  const widgetCode = user ? `<script src="https://popproof.io/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
   const reviewLink = user ? `https://popproof.io/review?uid=${user.id}` : ''
 
   const handleCopy = () => {
@@ -76,92 +83,163 @@ export default function Dashboard() {
   }
 
   const trialExpired = isTrialExpired()
+  const daysLeft = trialDaysLeft()
 
   return (
-    <div style={{ maxWidth: '800px', margin: '50px auto', padding: '40px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-        <h1 style={{ color: '#00c6ff' }}>Popproof Dashboard</h1>
-        <button onClick={handleLogout} style={{ padding: '10px 20px', background: '#ff4444', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
-          Logout
-        </button>
-      </div>
+    <>
+      <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+      <div style={{
+        minHeight: '100vh',
+        background: '#0d0a1a',
+        backgroundImage: 'radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)',
+        backgroundSize: '22px 22px',
+      }}>
 
-      <div style={{ background: '#f8f9fa', padding: '20px', borderRadius: '12px', marginBottom: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <p>Welcome back! 👋 <strong>{user?.email}</strong></p>
-        <span style={{
-          padding: '6px 14px',
-          borderRadius: '20px',
-          fontSize: '13px',
-          fontWeight: 'bold',
-          background: profile?.subscription_status === 'active' ? '#00bb77' : trialExpired ? '#ff4444' : '#f59e0b',
-          color: 'white'
-        }}>
-          {profile?.subscription_status === 'active' ? '✅ Active' : trialExpired ? '❌ Expired' : '⏳ Trial'}
-        </span>
-      </div>
-
-      {trialExpired ? (
-        <div style={{ background: '#fff5f5', border: '2px solid #ff4444', borderRadius: '12px', padding: '30px', marginBottom: '30px', textAlign: 'center' }}>
-          <h2 style={{ color: '#ff4444', marginBottom: '12px' }}>⚠️ Your trial has expired!</h2>
-          <p style={{ color: '#666', marginBottom: '20px' }}>Subscribe to continue using Popproof and keep your widget active.</p>
-          <button
-            onClick={() => window.location.href = '/pricing'}
-            style={{ padding: '12px 30px', background: '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}
-          >
-            🚀 Subscribe Now — €19/month
-          </button>
-        </div>
-      ) : (
-        <div style={{ background: 'white', border: '2px solid #00c6ff', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
-          <h2 style={{ marginBottom: '8px' }}>🚀 Your FOMO Widget</h2>
-          <p style={{ color: '#666', marginBottom: '16px' }}>Paste this code before the closing &lt;/body&gt; tag on your website:</p>
-          <div style={{ background: '#1a1a2e', borderRadius: '8px', padding: '16px', marginBottom: '12px', overflowX: 'auto' }}>
-            <code style={{ color: '#00c6ff', fontSize: '13px', whiteSpace: 'nowrap' }}>
-              {widgetCode}
-            </code>
+        {/* NAV */}
+        <nav style={{ background: '#0d0a1a', borderBottom: '3px solid #111', padding: '14px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+          <a href="/" style={{ textDecoration: 'none' }}>
+            <img src="/popproof-logo.png" alt="Popproof" style={{ height: '34px', objectFit: 'contain' }} />
+          </a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontWeight: 700 }}>{user?.email}</span>
+            <button onClick={handleLogout} style={{
+              fontFamily: "'Bangers', cursive",
+              fontSize: '16px',
+              letterSpacing: '1px',
+              padding: '8px 20px',
+              background: 'transparent',
+              color: 'white',
+              border: '3px solid #ff4444',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              boxShadow: '3px 3px 0 #ff4444',
+            }}>LOGOUT</button>
           </div>
-          <button
-            onClick={handleCopy}
-            style={{ padding: '10px 24px', background: copied ? '#00bb77' : '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}
-          >
-            {copied ? '✅ Copied!' : '📋 Copy Code'}
-          </button>
-        </div>
-      )}
+        </nav>
 
-      <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
-        <h2 style={{ marginBottom: '8px' }}>⭐ Your Review Link</h2>
-        <p style={{ color: '#666', marginBottom: '16px' }}>Share this link with your customers to collect reviews:</p>
-        <div style={{ background: '#f8f9fa', borderRadius: '8px', padding: '16px', marginBottom: '12px', overflowX: 'auto' }}>
-          <code style={{ color: '#333', fontSize: '13px', whiteSpace: 'nowrap' }}>
-            {reviewLink}
-          </code>
-        </div>
-        <button
-          onClick={handleCopyReviewLink}
-          style={{ padding: '10px 24px', background: reviewLinkCopied ? '#00bb77' : '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}
-        >
-          {reviewLinkCopied ? '✅ Copied!' : '📋 Copy Review Link'}
-        </button>
-      </div>
+        <div style={{ maxWidth: '860px', margin: '0 auto', padding: '40px 24px' }}>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2>Reviews ({reviews.length})</h2>
-      </div>
-      {reviews.length === 0 ? (
-        <p style={{ color: '#718096', textAlign: 'center', padding: '40px' }}>No reviews yet. Share your review link to get started!</p>
-      ) : (
-        reviews.map((review) => (
-          <div key={review.id} style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px', marginBottom: '15px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <strong>{review.customer_name}</strong>
-              <span>{stars(review.rating)}</span>
+          {/* WELCOME BANNER */}
+          <div style={{ background: '#1a1030', border: '3px solid rgba(124,58,237,0.4)', borderRadius: '14px', padding: '20px 24px', marginBottom: '28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px' }}>
+                👋 WELCOME BACK!
+              </div>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, marginTop: '4px' }}>
+                {profile?.business_name ? `🏢 ${profile.business_name}` : user?.email}
+              </div>
             </div>
-            <p style={{ color: '#4a5568', marginBottom: '8px' }}>{review.review_text}</p>
-            <small style={{ color: '#718096' }}>{review.customer_email}</small>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {profile?.subscription_status === 'active' ? (
+                <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '6px 16px', background: '#00bb77', border: '3px solid #111', borderRadius: '20px', color: 'white', boxShadow: '3px 3px 0 #111' }}>✅ ACTIVE</span>
+              ) : trialExpired ? (
+                <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '6px 16px', background: '#ff4444', border: '3px solid #111', borderRadius: '20px', color: 'white', boxShadow: '3px 3px 0 #111' }}>❌ EXPIRED</span>
+              ) : (
+                <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '6px 16px', background: '#f59e0b', border: '3px solid #111', borderRadius: '20px', color: 'white', boxShadow: '3px 3px 0 #111' }}>⏳ {daysLeft} DAYS LEFT</span>
+              )}
+            </div>
           </div>
-        ))
-      )}
-    </div>
+
+          {/* TRIAL EXPIRED */}
+          {trialExpired && (
+            <div style={{ background: '#1a0a0a', border: '3px solid #ff4444', borderRadius: '14px', padding: '30px', marginBottom: '28px', textAlign: 'center', boxShadow: '5px 5px 0 #ff4444' }}>
+              <div style={{ fontFamily: "'Bangers', cursive", fontSize: '32px', color: '#ff4444', letterSpacing: '1px', marginBottom: '8px' }}>⚠️ TRIAL EXPIRED!</div>
+              <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '20px', fontSize: '14px' }}>Subscribe to keep your widget active and keep converting visitors!</p>
+              <button onClick={() => window.location.href = '/pricing'} style={{
+                fontFamily: "'Bangers', cursive",
+                fontSize: '20px',
+                letterSpacing: '1px',
+                padding: '12px 32px',
+                background: '#7c3aed',
+                color: 'white',
+                border: '3px solid #111',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                boxShadow: '5px 5px 0 #111',
+              }}>🚀 SUBSCRIBE NOW — €19/MONTH</button>
+            </div>
+          )}
+
+          {/* WIDGET CODE */}
+          {!trialExpired && (
+            <div style={{ background: '#1a1030', border: '3px solid rgba(124,58,237,0.4)', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '5px 5px 0 rgba(124,58,237,0.3)' }}>
+              <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px', marginBottom: '6px' }}>🚀 YOUR FOMO WIDGET</div>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', fontWeight: 700, marginBottom: '16px' }}>Paste this code before the closing &lt;/body&gt; tag on your website:</p>
+              <div style={{ background: '#0a0614', border: '2px solid rgba(124,58,237,0.3)', borderRadius: '8px', padding: '16px', marginBottom: '14px', overflowX: 'auto' }}>
+                <code style={{ color: '#a78bfa', fontSize: '12px', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
+                  {widgetCode}
+                </code>
+              </div>
+              <button onClick={handleCopy} style={{
+                fontFamily: "'Bangers', cursive",
+                fontSize: '16px',
+                letterSpacing: '1px',
+                padding: '10px 24px',
+                background: copied ? '#00bb77' : '#7c3aed',
+                color: 'white',
+                border: '3px solid #111',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                boxShadow: '3px 3px 0 #111',
+                transition: 'all 0.15s',
+              }}>
+                {copied ? '✅ COPIED!' : '📋 COPY CODE'}
+              </button>
+            </div>
+          )}
+
+          {/* REVIEW LINK */}
+          <div style={{ background: '#1a1030', border: '3px solid rgba(124,58,237,0.4)', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '5px 5px 0 rgba(124,58,237,0.3)' }}>
+            <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px', marginBottom: '6px' }}>⭐ YOUR REVIEW LINK</div>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', fontWeight: 700, marginBottom: '16px' }}>Share this link with customers to collect reviews:</p>
+            <div style={{ background: '#0a0614', border: '2px solid rgba(124,58,237,0.3)', borderRadius: '8px', padding: '16px', marginBottom: '14px', overflowX: 'auto' }}>
+              <code style={{ color: '#a78bfa', fontSize: '12px', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
+                {reviewLink}
+              </code>
+            </div>
+            <button onClick={handleCopyReviewLink} style={{
+              fontFamily: "'Bangers', cursive",
+              fontSize: '16px',
+              letterSpacing: '1px',
+              padding: '10px 24px',
+              background: reviewLinkCopied ? '#00bb77' : '#7c3aed',
+              color: 'white',
+              border: '3px solid #111',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              boxShadow: '3px 3px 0 #111',
+              transition: 'all 0.15s',
+            }}>
+              {reviewLinkCopied ? '✅ COPIED!' : '📋 COPY REVIEW LINK'}
+            </button>
+          </div>
+
+          {/* REVIEWS */}
+          <div style={{ background: '#1a1030', border: '3px solid rgba(124,58,237,0.4)', borderRadius: '14px', padding: '24px', boxShadow: '5px 5px 0 rgba(124,58,237,0.3)' }}>
+            <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px', marginBottom: '16px' }}>
+              ⭐ REVIEWS ({reviews.length})
+            </div>
+            {reviews.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '30px' }}>
+                <div style={{ fontSize: '40px', marginBottom: '12px' }}>📭</div>
+                <p style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700, fontSize: '14px' }}>No reviews yet. Share your review link to get started!</p>
+              </div>
+            ) : (
+              reviews.map((review) => (
+                <div key={review.id} style={{ background: '#0a0614', border: '2px solid rgba(124,58,237,0.2)', borderRadius: '10px', padding: '16px', marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', alignItems: 'center' }}>
+                    <strong style={{ color: 'white', fontSize: '14px' }}>{review.customer_name}</strong>
+                    <span>{stars(review.rating)}</span>
+                  </div>
+                  <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '6px', fontSize: '13px', lineHeight: 1.5 }}>{review.review_text}</p>
+                  <small style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>{review.customer_email}</small>
+                </div>
+              ))
+            )}
+          </div>
+
+        </div>
+      </div>
+    </>
   )
 }
