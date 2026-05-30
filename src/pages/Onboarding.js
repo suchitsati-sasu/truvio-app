@@ -108,6 +108,13 @@ export default function Onboarding() {
     const notifications = generateNotifications(form.business_type, form.city, form.street, user.id)
     await supabase.from('notifications').insert(notifications)
 
+    // Welcome email bhejo
+    await fetch('/api/send-welcome', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: user.email, business_name: form.business_name, userId: user.id }),
+    })
+
     // Stripe checkout
     const res = await fetch('/api/create-checkout-session', {
       method: 'POST',
