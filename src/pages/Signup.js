@@ -84,7 +84,7 @@ export default function Signup() {
           {/* Badge */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(124,58,237,0.1)', border: '2px solid rgba(124,58,237,0.3)', color: '#7c3aed', padding: '5px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, letterSpacing: '1px' }}>
-              🎁 14-DAY FREE TRIAL — NO CARD NEEDED
+              🎁 START A 14-DAY FREE TRIAL
             </div>
           </div>
 
@@ -177,7 +177,7 @@ export default function Signup() {
 
         {/* Trust badges */}
         <div style={{ display: 'flex', gap: '20px', marginTop: '24px', flexWrap: 'wrap', justifyContent: 'center', zIndex: 1 }}>
-          {['✓ No credit card', '✓ Cancel anytime', '✓ GDPR compliant'].map((item, i) => (
+          {['✓ Start a 14-day free trial', '✓ Cancel anytime', '✓ GDPR compliant'].map((item, i) => (
             <span key={i} style={{ fontSize: '12px', fontWeight: 700, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.5px' }}>{item}</span>
           ))}
         </div>
