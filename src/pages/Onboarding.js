@@ -19,12 +19,9 @@ function generateNotifications(businessType, city, street, userId) {
   const cafeNames = ['Janis','Karlis','Andris','Peteris','Maris','Roberts','Edgars','Arnis','Uldis','Gints']
   const indianNames = ['Priya','Rahul','Anita','Vikram','Pooja','Amit','Sneha','Raj','Neha','Arjun']
   const euNames = ['Sophie','Lucas','Emma','Noah','Olivia','Liam','Isabella','Ethan','Mia','James']
-
   const allNames = [...salonNames, ...cafeNames, ...indianNames, ...euNames]
-
   const cityNearby = { 'Riga': ['Jurmala','Ogre'], 'Mumbai': ['Pune','Thane'], 'London': ['Oxford','Brighton'] }
   const euCities = ['Berlin','Paris','Amsterdam','Warsaw','Prague','Vienna']
-
   const actions = {
     salon: ['just made a booking! 💇', 'just reserved a slot! ✨', 'just booked an appointment! 🌟', 'just secured a spot! 💅', 'just scheduled a visit! 🌸'],
     cafe: ['just placed an order! ☕', 'just made a reservation! 🍽️', 'just booked a table! ✨', 'just placed a takeaway order! 🥡', 'just made a booking! 😊'],
@@ -36,14 +33,11 @@ function generateNotifications(businessType, city, street, userId) {
     education: ['just enrolled! 🎓', 'just booked a session! 📚', 'just registered! ✨', 'just signed up! 🌟', 'just secured a spot! 💡'],
     other: ['just made a booking! 🌟', 'just placed an order! ✨', 'just visited! 😊', 'just signed up! 🎉', 'just confirmed a booking! 💫'],
   }
-
   const typeActions = actions[businessType] || actions['other']
   const notifications = []
-
   for (let i = 0; i < 150; i++) {
     const name = allNames[Math.floor(Math.random() * allNames.length)]
     const action = typeActions[Math.floor(Math.random() * typeActions.length)]
-
     let location
     const rand = Math.random()
     if (rand < 0.75) {
@@ -54,7 +48,6 @@ function generateNotifications(businessType, city, street, userId) {
     } else {
       location = euCities[Math.floor(Math.random() * euCities.length)]
     }
-
     const minsAgo = Math.floor(Math.random() * 1440)
     notifications.push({
       user_id: userId,
@@ -63,7 +56,6 @@ function generateNotifications(businessType, city, street, userId) {
       created_at: new Date(Date.now() - minsAgo * 60000).toISOString(),
     })
   }
-
   return notifications
 }
 
@@ -75,6 +67,7 @@ export default function Onboarding() {
     business_name: '',
     business_type: '',
     city: '',
+    country: '',
     street: '',
   })
 
@@ -89,6 +82,10 @@ export default function Onboarding() {
     }
     if (step === 3 && !form.city.trim()) {
       alert('Please enter your city!')
+      return
+    }
+    if (step === 3 && !form.country.trim()) {
+      alert('Please enter your country!')
       return
     }
     setStep(step + 1)
@@ -132,124 +129,244 @@ export default function Onboarding() {
 
   const inputStyle = {
     width: '100%',
-    padding: '12px',
+    padding: '13px 16px',
     borderRadius: '8px',
-    border: '2px solid #e0e0e0',
-    fontSize: '16px',
+    border: '3px solid #111',
+    fontSize: '15px',
     marginTop: '8px',
     boxSizing: 'border-box',
+    fontFamily: "'Comic Neue', cursive",
+    fontWeight: 700,
+    background: 'white',
+    boxShadow: '3px 3px 0 #111',
+    outline: 'none',
+    color: '#111',
+  }
+
+  const labelStyle = {
+    display: 'block',
+    fontFamily: "'Bangers', cursive",
+    fontSize: '14px',
+    letterSpacing: '1px',
+    color: 'white',
+    marginTop: '16px',
   }
 
   return (
-    <div style={{ maxWidth: '500px', margin: '60px auto', padding: '40px', background: 'white', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-      
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
-        {[1, 2, 3, 4].map(s => (
-          <div key={s} style={{ flex: 1, height: '4px', borderRadius: '2px', background: s <= step ? '#00c6ff' : '#e0e0e0' }} />
-        ))}
-      </div>
+    <>
+      <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+      <div style={{
+        minHeight: '100vh',
+        background: '#0d0a1a',
+        backgroundImage: 'radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)',
+        backgroundSize: '22px 22px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px 20px',
+        position: 'relative',
+      }}>
 
-      {step === 1 && (
-        <div>
-          <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>👋 Welcome!</h2>
-          <p style={{ color: '#666', marginBottom: '24px' }}>Let's set up your FOMO widget in 2 minutes.</p>
-          <label style={{ fontWeight: 'bold' }}>What's your business name?</label>
-          <input
-            style={inputStyle}
-            placeholder="e.g. WoW Beauty Lounge"
-            value={form.business_name}
-            onChange={e => setForm({ ...form, business_name: e.target.value })}
-          />
-        </div>
-      )}
+        {/* Glow */}
+        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '600px', height: '300px', background: 'radial-gradient(ellipse,rgba(124,58,237,0.15) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
-      {step === 2 && (
-        <div>
-          <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>🏢 Business Type</h2>
-          <p style={{ color: '#666', marginBottom: '24px' }}>What kind of business do you run?</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {BUSINESS_TYPES.map(bt => (
-              <div
-                key={bt.value}
-                onClick={() => setForm({ ...form, business_type: bt.value })}
-                style={{
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  border: `2px solid ${form.business_type === bt.value ? '#00c6ff' : '#e0e0e0'}`,
-                  background: form.business_type === bt.value ? '#f0f9ff' : 'white',
-                  cursor: 'pointer',
-                  fontSize: '15px',
-                  fontWeight: form.business_type === bt.value ? 'bold' : 'normal',
-                }}
-              >
-                {bt.label}
-              </div>
+        {/* Logo */}
+        <a href="/" style={{ textDecoration: 'none', marginBottom: '24px', zIndex: 1 }}>
+          <img src="/popproof-logo.png" alt="Popproof" style={{ height: '40px', objectFit: 'contain' }} />
+        </a>
+
+        {/* Card */}
+        <div style={{
+          background: 'white',
+          border: '3px solid #111',
+          borderRadius: '16px',
+          padding: '40px',
+          width: '100%',
+          maxWidth: '520px',
+          boxShadow: '7px 7px 0 #111',
+          position: 'relative',
+          zIndex: 1,
+        }}>
+
+          {/* Progress bar */}
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
+            {[1, 2, 3, 4].map(s => (
+              <div key={s} style={{
+                flex: 1, height: '6px', borderRadius: '3px',
+                background: s <= step ? '#7c3aed' : '#e0e0e0',
+                border: s <= step ? '2px solid #111' : '2px solid #e0e0e0',
+                transition: 'all 0.3s',
+              }} />
             ))}
           </div>
-        </div>
-      )}
 
-      {step === 3 && (
-        <div>
-          <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>📍 Your Location</h2>
-          <p style={{ color: '#666', marginBottom: '24px' }}>We'll use this to generate local notifications.</p>
-          <label style={{ fontWeight: 'bold' }}>City *</label>
-          <input
-            style={inputStyle}
-            placeholder="e.g. Riga, Mumbai, London..."
-            value={form.city}
-            onChange={e => setForm({ ...form, city: e.target.value })}
-          />
-          <label style={{ fontWeight: 'bold', display: 'block', marginTop: '16px' }}>Street / Area <span style={{ color: '#999', fontWeight: 'normal' }}>(optional)</span></label>
-          <input
-            style={inputStyle}
-            placeholder="e.g. Elizabetes iela, Connaught Place..."
-            value={form.street}
-            onChange={e => setForm({ ...form, street: e.target.value })}
-          />
-          <p style={{ color: '#999', fontSize: '13px', marginTop: '8px' }}>Adding street makes notifications more hyper-local and believable!</p>
-        </div>
-      )}
+          {/* Step 1 — Business Name */}
+          {step === 1 && (
+            <div>
+              <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '28px', letterSpacing: '1px', marginBottom: '8px', color: '#111' }}>👋 WELCOME!</h2>
+              <p style={{ color: '#666', marginBottom: '24px', fontWeight: 700, fontSize: '14px' }}>Let's set up your FOMO widget in 2 minutes.</p>
+              <label style={{ ...labelStyle, color: '#111' }}>📛 BUSINESS NAME</label>
+              <input
+                style={inputStyle}
+                placeholder="e.g. XYZ Business"
+                value={form.business_name}
+                onChange={e => setForm({ ...form, business_name: e.target.value })}
+              />
+            </div>
+          )}
 
-      {step === 4 && (
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '64px', marginBottom: '16px' }}>🎉</div>
-          <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>You're all set!</h2>
-          <p style={{ color: '#666', marginBottom: '24px' }}>We'll generate 150 customized notifications for <strong>{form.business_name}</strong> in <strong>{form.city}</strong>.</p>
-          <div style={{ background: '#f0f9ff', borderRadius: '12px', padding: '16px', marginBottom: '24px', textAlign: 'left' }}>
-            <div>🏢 <strong>{form.business_name}</strong></div>
-            <div style={{ marginTop: '8px' }}>📊 {BUSINESS_TYPES.find(b => b.value === form.business_type)?.label}</div>
-            <div style={{ marginTop: '8px' }}>📍 {form.city}{form.street ? `, ${form.street}` : ''}</div>
+          {/* Step 2 — Business Type */}
+          {step === 2 && (
+            <div>
+              <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '28px', letterSpacing: '1px', marginBottom: '8px', color: '#111' }}>🏢 BUSINESS TYPE</h2>
+              <p style={{ color: '#666', marginBottom: '16px', fontWeight: 700, fontSize: '14px' }}>What kind of business do you run?</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '380px', overflowY: 'auto' }}>
+                {BUSINESS_TYPES.map(bt => (
+                  <div
+                    key={bt.value}
+                    onClick={() => setForm({ ...form, business_type: bt.value })}
+                    style={{
+                      padding: '12px 16px',
+                      borderRadius: '8px',
+                      border: `3px solid ${form.business_type === bt.value ? '#7c3aed' : '#e0e0e0'}`,
+                      background: form.business_type === bt.value ? '#f5f3ff' : 'white',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      fontFamily: "'Comic Neue', cursive",
+                      boxShadow: form.business_type === bt.value ? '3px 3px 0 #111' : 'none',
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    {bt.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Step 3 — Location */}
+          {step === 3 && (
+            <div>
+              <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '28px', letterSpacing: '1px', marginBottom: '8px', color: '#111' }}>📍 YOUR LOCATION</h2>
+              <p style={{ color: '#666', marginBottom: '8px', fontWeight: 700, fontSize: '14px' }}>We'll use this to generate hyper-local notifications.</p>
+
+              <label style={{ ...labelStyle, color: '#111' }}>🌍 COUNTRY *</label>
+              <input
+                style={inputStyle}
+                placeholder="e.g. Latvia, India, UK..."
+                value={form.country}
+                onChange={e => setForm({ ...form, country: e.target.value })}
+              />
+
+              <label style={{ ...labelStyle, color: '#111' }}>🏙️ CITY *</label>
+              <input
+                style={inputStyle}
+                placeholder="e.g. Riga, Mumbai, London..."
+                value={form.city}
+                onChange={e => setForm({ ...form, city: e.target.value })}
+              />
+
+              <label style={{ ...labelStyle, color: '#111' }}>🛣️ STREET / AREA <span style={{ color: '#999', fontSize: '12px', fontFamily: 'sans-serif', letterSpacing: 0 }}>(optional)</span></label>
+              <input
+                style={inputStyle}
+                placeholder="e.g. Main Street, Connaught Place..."
+                value={form.street}
+                onChange={e => setForm({ ...form, street: e.target.value })}
+              />
+              <p style={{ color: '#999', fontSize: '12px', marginTop: '8px', fontWeight: 700 }}>💡 Adding street makes notifications more hyper-local!</p>
+            </div>
+          )}
+
+          {/* Step 4 — Confirm */}
+          {step === 4 && (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '64px', marginBottom: '16px' }}>🎉</div>
+              <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '28px', letterSpacing: '1px', marginBottom: '8px', color: '#111' }}>YOU'RE ALL SET!</h2>
+              <p style={{ color: '#666', marginBottom: '24px', fontSize: '14px', fontWeight: 700 }}>
+                We'll generate 150 customized notifications for <strong>{form.business_name}</strong> in <strong>{form.city}</strong>.
+              </p>
+              <div style={{ background: '#f5f3ff', border: '3px solid #7c3aed', borderRadius: '12px', padding: '16px', marginBottom: '8px', textAlign: 'left', boxShadow: '3px 3px 0 #111' }}>
+                <div style={{ fontWeight: 700, fontSize: '14px', marginBottom: '6px' }}>📛 <strong>{form.business_name}</strong></div>
+                <div style={{ fontWeight: 700, fontSize: '14px', marginBottom: '6px' }}>📊 {BUSINESS_TYPES.find(b => b.value === form.business_type)?.label}</div>
+                <div style={{ fontWeight: 700, fontSize: '14px', marginBottom: '6px' }}>🌍 {form.country}</div>
+                <div style={{ fontWeight: 700, fontSize: '14px' }}>📍 {form.city}{form.street ? `, ${form.street}` : ''}</div>
+              </div>
+            </div>
+          )}
+
+          {/* Buttons */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '32px' }}>
+            {step > 1 && (
+              <button
+                onClick={() => setStep(step - 1)}
+                style={{
+                  padding: '12px 24px',
+                  background: 'white',
+                  border: '3px solid #111',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontFamily: "'Bangers', cursive",
+                  letterSpacing: '1px',
+                  cursor: 'pointer',
+                  boxShadow: '3px 3px 0 #111',
+                }}
+              >
+                ← BACK
+              </button>
+            )}
+            {step < 4 ? (
+              <button
+                onClick={handleNext}
+                style={{
+                  padding: '12px 28px',
+                  background: '#7c3aed',
+                  color: 'white',
+                  border: '3px solid #111',
+                  borderRadius: '8px',
+                  fontSize: '18px',
+                  fontFamily: "'Bangers', cursive",
+                  letterSpacing: '1px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  marginLeft: 'auto',
+                  boxShadow: '4px 4px 0 #111',
+                }}
+              >
+                NEXT →
+              </button>
+            ) : (
+              <button
+                onClick={handleFinish}
+                disabled={loading}
+                style={{
+                  padding: '12px 28px',
+                  background: loading ? '#ccc' : '#7c3aed',
+                  color: 'white',
+                  border: '3px solid #111',
+                  borderRadius: '8px',
+                  fontSize: '18px',
+                  fontFamily: "'Bangers', cursive",
+                  letterSpacing: '1px',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  marginLeft: 'auto',
+                  boxShadow: loading ? 'none' : '4px 4px 0 #111',
+                }}
+              >
+                {loading ? 'SETTING UP...' : '🚀 LAUNCH MY WIDGET!'}
+              </button>
+            )}
           </div>
         </div>
-      )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '32px' }}>
-        {step > 1 && (
-          <button
-            onClick={() => setStep(step - 1)}
-            style={{ padding: '12px 24px', background: 'none', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '16px', cursor: 'pointer' }}
-          >
-            ← Back
-          </button>
-        )}
-        {step < 4 ? (
-          <button
-            onClick={handleNext}
-            style={{ padding: '12px 24px', background: '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', cursor: 'pointer', fontWeight: 'bold', marginLeft: 'auto' }}
-          >
-            Next →
-          </button>
-        ) : (
-          <button
-            onClick={handleFinish}
-            disabled={loading}
-            style={{ padding: '12px 24px', background: '#00c6ff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', cursor: 'pointer', fontWeight: 'bold', marginLeft: 'auto' }}
-          >
-            {loading ? 'Setting up...' : '🚀 Launch My Widget!'}
-          </button>
-        )}
+        {/* Trust badges */}
+        <div style={{ display: 'flex', gap: '20px', marginTop: '24px', flexWrap: 'wrap', justifyContent: 'center', zIndex: 1 }}>
+          {['✓ 14-day free trial', '✓ Cancel anytime', '✓ GDPR compliant'].map((item, i) => (
+            <span key={i} style={{ fontSize: '12px', fontWeight: 700, color: 'rgba(255,255,255,0.35)' }}>{item}</span>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
