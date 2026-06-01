@@ -145,7 +145,7 @@ function Hero() {
               📖 SEE HOW IT WORKS
             </button>
           </div>
-          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ No credit card &nbsp;·&nbsp; ✓ Cancel anytime</p>
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ Start 14-day free trial &nbsp;·&nbsp; ✓ Cancel anytime</p>
         </div>
 
         {/* RIGHT — notification preview */}
@@ -726,7 +726,7 @@ function CtaSection() {
             LOGIN →
           </a>
         </div>
-        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '16px', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ No credit card &nbsp;·&nbsp; ✓ Cancel anytime</p>
+        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '16px', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ Start 14-day free trial &nbsp;·&nbsp; ✓ Cancel anytime</p>
       </div>
     </section>
   )
