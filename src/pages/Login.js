@@ -56,8 +56,16 @@ export default function Login() {
         <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '600px', height: '300px', background: 'radial-gradient(ellipse,rgba(124,58,237,0.15) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Logo */}
-        <a href="/" style={{ textDecoration: 'none', marginBottom: '24px', zIndex: 1 }}>
-          <img src="/popproof-logo.png" alt="Popproof" style={{ height: '40px', objectFit: 'contain' }} />
+        <a href="/" style={{ textDecoration: 'none', marginBottom: '24px', zIndex: 1, display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
+          <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: 'white', fontSize: '12px', fontWeight: 900 }}>✓</span>
+          </div>
+          <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
+          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '4px' }}>
+            <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', color: 'white', letterSpacing: '2px', lineHeight: 1 }}>PROOF</span>
+            <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, letterSpacing: '1px', lineHeight: 1 }}>BY NEXVIAN</span>
+          </div>
         </a>
 
         {/* Card */}
