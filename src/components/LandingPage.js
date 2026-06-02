@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+const isMobile = () => window.innerWidth <= 768
+
 // ============ WIDGET ============
 function FomoWidget() {
   const msgs = [
@@ -36,9 +38,9 @@ function FomoWidget() {
 
   return (
     <div style={{
-      position: 'fixed', bottom: '24px', left: '24px', zIndex: 9999,
+      position: 'fixed', bottom: '16px', left: '16px', zIndex: 9999,
       background: 'white', border: '3px solid #111', borderRadius: '14px',
-      padding: '14px 16px', maxWidth: '290px', boxShadow: '5px 5px 0 #111',
+      padding: '12px 14px', maxWidth: '260px', boxShadow: '5px 5px 0 #111',
       transform: animOut ? 'translateX(-120%)' : 'translateX(0)',
       opacity: animOut ? 0 : 1,
       transition: 'all 0.35s ease',
@@ -88,77 +90,110 @@ function ScrollBanner() {
 }
 
 // ============ NAV ============
-function Nav({ onNavigate }) {
+function Nav() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [mobile, setMobile] = useState(isMobile())
+
+  useEffect(() => {
+    const handle = () => setMobile(isMobile())
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
+
   return (
-    <nav style={{ background: '#0d0a1a', borderBottom: '3px solid #111', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, flexWrap: 'wrap', gap: '8px' }}>
+    <nav style={{ background: '#0d0a1a', borderBottom: '3px solid #111', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
       <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '5px', textDecoration: 'none' }}>
-<div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-  <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
-  <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <span style={{ color: 'white', fontSize: '12px', fontWeight: 900 }}>✓</span>
-  </div>
-  <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
-  <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '4px' }}>
-    <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', color: 'white', letterSpacing: '2px', lineHeight: 1 }}>PROOF</span>
-    <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, letterSpacing: '1px', lineHeight: 1 }}>BY NEXVIAN</span>
-  </div>
-</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
+          <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: 'white', fontSize: '12px', fontWeight: 900 }}>✓</span>
+          </div>
+          <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
+          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '4px' }}>
+            <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', color: 'white', letterSpacing: '2px', lineHeight: 1 }}>PROOF</span>
+            <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, letterSpacing: '1px', lineHeight: 1 }}>BY NEXVIAN</span>
+          </div>
+        </div>
       </a>
-      <div style={{ display: 'flex', gap: '22px', alignItems: 'center' }}>
-        {[['Home', ''], ['Features', 'features'], ['Pricing', 'pricing'], ['Stories', 'stories']].map(([label, id]) => (
-          <button key={id} onClick={() => id ? document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }) : window.scrollTo({ top: 0, behavior: 'smooth' })}
-            style={{ color: 'rgba(255,255,255,0.55)', fontSize: '15px', fontWeight: 700, cursor: 'pointer', background: 'none', border: 'none', fontFamily: "'Bangers', cursive", letterSpacing: '1px' }}
-            onMouseEnter={e => e.target.style.color = '#FFE033'}
-            onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}
-          >{label}</button>
-        ))}
-      </div>
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <a href="/login" style={{ fontFamily: "'Comic Neue', cursive", fontWeight: 700, fontSize: '13px', padding: '8px 18px', border: '3px solid #111', borderRadius: '6px', cursor: 'pointer', boxShadow: '3px 3px 0 #111', background: 'transparent', color: 'white', textDecoration: 'none' }}>Login</a>
-        <a href="/signup" style={{ fontFamily: "'Comic Neue', cursive", fontWeight: 700, fontSize: '13px', padding: '8px 18px', border: '3px solid #111', borderRadius: '6px', cursor: 'pointer', boxShadow: '3px 3px 0 #111', background: '#7c3aed', color: 'white', textDecoration: 'none' }}>Start Free!</a>
-      </div>
+
+      {mobile ? (
+        <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: '2px solid rgba(255,255,255,0.3)', borderRadius: '6px', padding: '6px 10px', cursor: 'pointer', color: 'white', fontSize: '18px' }}>
+          {menuOpen ? '✕' : '☰'}
+        </button>
+      ) : (
+        <>
+          <div style={{ display: 'flex', gap: '22px', alignItems: 'center' }}>
+            {[['Home', ''], ['Features', 'features'], ['Pricing', 'pricing'], ['Stories', 'stories']].map(([label, id]) => (
+              <button key={id} onClick={() => id ? document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }) : window.scrollTo({ top: 0, behavior: 'smooth' })}
+                style={{ color: 'rgba(255,255,255,0.55)', fontSize: '15px', fontWeight: 700, cursor: 'pointer', background: 'none', border: 'none', fontFamily: "'Bangers', cursive", letterSpacing: '1px' }}
+                onMouseEnter={e => e.target.style.color = '#FFE033'}
+                onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}
+              >{label}</button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <a href="/login" style={{ fontFamily: "'Comic Neue', cursive", fontWeight: 700, fontSize: '13px', padding: '8px 18px', border: '3px solid #111', borderRadius: '6px', cursor: 'pointer', boxShadow: '3px 3px 0 #111', background: 'transparent', color: 'white', textDecoration: 'none' }}>Login</a>
+            <a href="/signup" style={{ fontFamily: "'Comic Neue', cursive", fontWeight: 700, fontSize: '13px', padding: '8px 18px', border: '3px solid #111', borderRadius: '6px', cursor: 'pointer', boxShadow: '3px 3px 0 #111', background: '#7c3aed', color: 'white', textDecoration: 'none' }}>Start Free!</a>
+          </div>
+        </>
+      )}
+
+      {mobile && menuOpen && (
+        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#0d0a1a', borderBottom: '3px solid #111', padding: '16px 20px', zIndex: 99, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {[['Home', ''], ['Features', 'features'], ['Pricing', 'pricing'], ['Stories', 'stories']].map(([label, id]) => (
+            <button key={id} onClick={() => { id ? document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }) : window.scrollTo({ top: 0, behavior: 'smooth' }); setMenuOpen(false) }}
+              style={{ color: 'rgba(255,255,255,0.7)', fontSize: '18px', fontWeight: 700, cursor: 'pointer', background: 'none', border: 'none', fontFamily: "'Bangers', cursive", letterSpacing: '1px', textAlign: 'left', padding: '4px 0' }}
+            >{label}</button>
+          ))}
+          <div style={{ display: 'flex', gap: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <a href="/login" style={{ fontFamily: "'Comic Neue', cursive", fontWeight: 700, fontSize: '13px', padding: '8px 18px', border: '3px solid #111', borderRadius: '6px', background: 'transparent', color: 'white', textDecoration: 'none' }}>Login</a>
+            <a href="/signup" style={{ fontFamily: "'Comic Neue', cursive", fontWeight: 700, fontSize: '13px', padding: '8px 18px', border: '3px solid #111', borderRadius: '6px', background: '#7c3aed', color: 'white', textDecoration: 'none' }}>Start Free!</a>
+          </div>
+        </div>
+      )}
     </nav>
   )
 }
 
 // ============ HERO ============
 function Hero() {
+  const [mobile, setMobile] = useState(isMobile())
+  useEffect(() => {
+    const handle = () => setMobile(isMobile())
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
+
   return (
-    <section style={{ background: '#0d0a1a', padding: '70px 32px 60px', position: 'relative', overflow: 'hidden' }}>
-      {/* dots */}
+    <section style={{ background: '#0d0a1a', padding: mobile ? '40px 20px' : '70px 32px 60px', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)', backgroundSize: '22px 22px', pointerEvents: 'none' }} />
-      {/* glow */}
       <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '600px', height: '300px', background: 'radial-gradient(ellipse,rgba(124,58,237,0.15) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
-      <div style={{ maxWidth: '960px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-        {/* LEFT */}
+      <div style={{ maxWidth: '960px', margin: '0 auto', display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap: mobile ? '32px' : '48px', alignItems: 'center', position: 'relative', zIndex: 1 }}>
         <div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(124,58,237,0.12)', border: '2px solid rgba(124,58,237,0.3)', color: '#a78bfa', padding: '5px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, letterSpacing: '1px', marginBottom: '20px' }}>
             ⚡ SOCIAL PROOF THAT ACTUALLY CONVERTS
           </div>
-          <h1 style={{ fontFamily: "'Bangers', cursive", fontSize: '54px', color: 'white', lineHeight: 1.05, marginBottom: '18px', letterSpacing: '1px' }}>
+          <h1 style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '38px' : '54px', color: 'white', lineHeight: 1.05, marginBottom: '18px', letterSpacing: '1px' }}>
             TURN VISITORS INTO{' '}
             <span style={{ color: '#FFE033' }}>BELIEVERS</span>{' '}
             WITH <span style={{ color: '#ec4899' }}>REAL-TIME</span> SOCIAL PROOF
           </h1>
-          <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '30px', maxWidth: '480px' }}>
+          <p style={{ fontSize: mobile ? '14px' : '16px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '30px' }}>
             Show real bookings, purchases & reviews as they happen. Build trust, create FOMO, and watch your conversions explode — in 5 minutes.
           </p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '14px' }}>
-            <a href="/signup" style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', letterSpacing: '1px', padding: '13px 28px', background: '#7c3aed', color: 'white', border: '3px solid #111', borderRadius: '8px', cursor: 'pointer', boxShadow: '5px 5px 0 #111', textDecoration: 'none', display: 'inline-block' }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translate(-2px,-2px)'; e.currentTarget.style.boxShadow = '7px 7px 0 #111' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '5px 5px 0 #111' }}>
+            <a href="/signup" style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '17px' : '20px', letterSpacing: '1px', padding: '13px 28px', background: '#7c3aed', color: 'white', border: '3px solid #111', borderRadius: '8px', cursor: 'pointer', boxShadow: '5px 5px 0 #111', textDecoration: 'none', display: 'inline-block' }}>
               🚀 START FREE TRIAL
             </a>
             <button onClick={() => document.getElementById('stories')?.scrollIntoView({ behavior: 'smooth' })}
-              style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', letterSpacing: '1px', padding: '13px 28px', background: 'transparent', color: 'white', border: '3px solid rgba(255,255,255,0.2)', borderRadius: '8px', cursor: 'pointer', textDecoration: 'none', display: 'inline-block' }}>
+              style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '17px' : '20px', letterSpacing: '1px', padding: '13px 28px', background: 'transparent', color: 'white', border: '3px solid rgba(255,255,255,0.2)', borderRadius: '8px', cursor: 'pointer' }}>
               📖 SEE HOW IT WORKS
             </button>
           </div>
-          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ Start 14-day free trial &nbsp;·&nbsp; ✓ Cancel anytime</p>
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ Cancel anytime</p>
         </div>
 
-        {/* RIGHT — notification preview */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ background: '#1a1030', border: '3px solid rgba(124,58,237,0.3)', borderRadius: '14px', padding: '16px' }}>
             <div style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.25)', letterSpacing: '2px', marginBottom: '10px' }}>LIVE NOTIFICATIONS</div>
@@ -181,7 +216,7 @@ function Hero() {
           </div>
           <div style={{ background: '#0a0614', border: '3px solid rgba(124,58,237,0.2)', borderRadius: '10px', padding: '14px' }}>
             <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', letterSpacing: '1.5px', marginBottom: '8px', fontWeight: 700 }}>INSTALL IN 5 MINUTES</div>
-            <pre style={{ fontSize: '11px', color: '#a78bfa', fontFamily: 'monospace', lineHeight: 1.7, margin: 0 }}>
+            <pre style={{ fontSize: '11px', color: '#a78bfa', fontFamily: 'monospace', lineHeight: 1.7, margin: 0, overflowX: 'auto' }}>
               <span style={{ color: '#6ee7b7' }}>&lt;script</span>{' '}src="https://popproof.io/widget.js"{'\n'}
               {'  '}<span style={{ color: '#6ee7b7' }}>data-id</span>="YOUR_ID"{'\n'}
               <span style={{ color: '#6ee7b7' }}>&gt;&lt;/script&gt;</span>
@@ -196,12 +231,11 @@ function Hero() {
 // ============ TRUST BAR ============
 function TrustBar() {
   return (
-    <div style={{ background: '#FFE033', borderTop: '3px solid #111', borderBottom: '3px solid #111', padding: '12px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '40px', flexWrap: 'wrap' }}>
+    <div style={{ background: '#FFE033', borderTop: '3px solid #111', borderBottom: '3px solid #111', padding: '12px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
       {[['500+', 'Businesses trust us'], ['2.4M+', 'Notifications shown'], ['38%', 'Avg conversion lift'], ['4.9★', 'Average rating']].map(([num, label], i) => (
         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
           <strong style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: '#111', letterSpacing: '0.5px' }}>{num}</strong>
           <span style={{ fontSize: '12px', fontWeight: 700, color: '#555' }}>{label}</span>
-          {i < 3 && <span style={{ fontSize: '18px', color: 'rgba(0,0,0,0.2)', marginLeft: '20px' }}>|</span>}
         </div>
       ))}
     </div>
@@ -219,7 +253,7 @@ const STORIES = {
         panels: [
           { bg: 'white', caption: { bg: '#7c3aed', text: 'Sofia opens her salon website. She is READY. 😤' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-              <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center', maxWidth: '175px', position: 'relative' }}>
+              <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center', maxWidth: '175px' }}>
                 I built my salon website! Clients will flood in like crazy! 🎉
               </div>
               <div style={{ fontSize: '48px' }}>💇‍♀️</div>
@@ -236,11 +270,8 @@ const STORIES = {
           )},
           { bg: 'white', caption: { bg: '#374151', text: 'Visitors come. They look. They leave. No trust. No proof.' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#555', textAlign: 'center' }}>A visitor finds Sofia's site...</div>
               <div style={{ fontSize: '36px' }}>🤔</div>
-              <div style={{ background: 'white', border: '2px solid #111', borderRadius: '7px', padding: '6px 9px', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                ❓ Has anyone else used this?
-              </div>
+              <div style={{ background: 'white', border: '2px solid #111', borderRadius: '7px', padding: '6px 9px', fontSize: '10px', fontWeight: 700 }}>❓ Has anyone else used this?</div>
               <div style={{ fontSize: '32px' }}>🏃‍♀️💨</div>
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', color: '#ff3b3b' }}>BOUNCE!</div>
             </div>
@@ -271,7 +302,7 @@ const STORIES = {
           { bg: '#fdf2f8', caption: { bg: '#ec4899', text: 'A live bubble appears: "Marta from Āgenskalns just booked!"' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ background: 'white', border: '2px solid #111', borderRadius: '10px', padding: '8px 12px', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '3px 3px 0 #111' }}>
-                <span>✂️</span><span>Marta from Āgenskalns just booked!</span><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00cc77', flexShrink: 0 }} />
+                <span>✂️</span><span>Marta from Āgenskalns just booked!</span>
               </div>
               <div style={{ fontSize: '32px' }}>😮</div>
               <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center' }}>
@@ -358,7 +389,7 @@ const STORIES = {
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ fontSize: '11px', fontWeight: 700, color: '#888' }}>Tuesday 2:00 PM...</div>
               <div style={{ fontSize: '36px' }}>🪑🪑🪑</div>
-              <div style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', color: '#bbb', letterSpacing: '2px' }}>empty... empty... empty...</div>
+              <div style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', color: '#bbb', letterSpacing: '2px' }}>empty... empty...</div>
               <div style={{ fontSize: '28px' }}>😔</div>
             </div>
           )},
@@ -366,7 +397,7 @@ const STORIES = {
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ fontSize: '32px' }}>🔍</div>
               <div style={{ background: 'white', border: '2px solid #111', borderRadius: '7px', padding: '6px 9px', fontSize: '10px', fontWeight: 700, textAlign: 'center' }}>
-                People search "café near me"... but see NO reviews, NO activity!
+                No reviews, NO activity!
               </div>
               <div style={{ fontSize: '32px' }}>🏃‍♂️💨</div>
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '18px', color: '#ff3b3b' }}>THEY PICK SOMEONE ELSE!</div>
@@ -389,7 +420,7 @@ const STORIES = {
           { bg: '#fff7ed', caption: { bg: '#f97316', text: 'Popproof shows live check-ins & reviews on his website.' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ background: 'white', border: '2px solid #111', borderRadius: '10px', padding: '8px 12px', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '3px 3px 0 #111' }}>
-                <span>☕</span><span>Jānis from Pārdaugava just visited!</span>
+                <span>☕</span><span>Jānis just visited!</span>
               </div>
               <div style={{ background: 'white', border: '2px solid #111', borderRadius: '10px', padding: '8px 12px', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '3px 3px 0 #111' }}>
                 <span>⭐</span><span>Kristīne left a 5★ review!</span>
@@ -402,7 +433,7 @@ const STORIES = {
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '32px', color: '#854d0e', lineHeight: 1 }}>8 👥</div>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#555' }}>people visited today</div>
               <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center' }}>
-                This place is ALIVE on a Tuesday! I should check it out! 🤩
+                This place is ALIVE! I should check it out! 🤩
               </div>
             </div>
           )},
@@ -410,7 +441,7 @@ const STORIES = {
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ fontSize: '36px' }}>👥 → 👥👥</div>
               <div style={{ background: '#dcfce7', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center' }}>
-                "My regulars started bringing friends. It snowballed!" — Carlos 📣
+                "My regulars started bringing friends!" — Carlos 📣
               </div>
             </div>
           )},
@@ -445,7 +476,7 @@ const STORIES = {
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ fontSize: '28px' }}>👀</div>
               <div style={{ background: '#ccfbf1', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center' }}>
-                Hmm... is this shop legit? Has anyone actually bought from here?
+                Is this shop legit? Has anyone bought here?
               </div>
               <div style={{ fontSize: '28px' }}>🏃‍♀️💨</div>
             </div>
@@ -454,7 +485,6 @@ const STORIES = {
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ fontSize: '40px' }}>🔒</div>
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', color: '#ff3b3b', textAlign: 'center' }}>NO TRUST = NO SALES!</div>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#555', textAlign: 'center', lineHeight: 1.5 }}>Visitors need to SEE others buying before they buy.</div>
             </div>
           )},
           { bg: '#fff1f2', caption: { bg: '#ff3b3b', text: 'Nina tried ads. Spent €300. Got 2 more sales. 😤' }, content: () => (
@@ -474,7 +504,7 @@ const STORIES = {
           { bg: '#f0fdfa', caption: { bg: '#0d9488', text: 'Popproof shows live purchases on her store.' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ background: 'white', border: '2px solid #111', borderRadius: '10px', padding: '8px 12px', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '3px 3px 0 #111' }}>
-                <span>🛍️</span><span>Alise from Riga just purchased the Linen Set!</span>
+                <span>🛍️</span><span>Alise from Riga just purchased!</span>
               </div>
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', color: '#0d9488' }}>INSTANT TRUST! ✅</div>
             </div>
@@ -485,7 +515,7 @@ const STORIES = {
                 ⚠️ Only 3 left in stock!
               </div>
               <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center' }}>
-                Someone from Jūrmala just added this to cart! 🛒
+                Someone just added this to cart! 🛒
               </div>
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: '#ff3b3b' }}>FOMO OVERLOAD! ⚡</div>
             </div>
@@ -511,8 +541,14 @@ const STORIES = {
 }
 
 function ResultsGrid({ items }) {
+  const [mobile, setMobile] = useState(isMobile())
+  useEffect(() => {
+    const handle = () => setMobile(isMobile())
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px', margin: '24px 0' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: '14px', margin: '24px 0' }}>
       {items.map(({ num, label, color }, i) => (
         <div key={i} style={{ background: 'white', border: '3px solid #111', borderRadius: '10px', padding: '18px', textAlign: 'center', boxShadow: '5px 5px 0 #111' }}>
           <div style={{ fontFamily: "'Bangers', cursive", fontSize: '42px', lineHeight: 1, color }}>{num}</div>
@@ -525,29 +561,37 @@ function ResultsGrid({ items }) {
 
 function BizStories() {
   const [active, setActive] = useState('salon')
+  const [mobile, setMobile] = useState(isMobile())
   const story = STORIES[active]
+
+  useEffect(() => {
+    const handle = () => setMobile(isMobile())
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
 
   return (
     <div id="stories">
-      {/* Business selector */}
-      <div style={{ background: '#fffde7', padding: '60px 32px', borderTop: '3px solid #111' }}>
+      <div style={{ background: '#fffde7', padding: mobile ? '40px 16px' : '60px 32px', borderTop: '3px solid #111' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
           <span style={{ fontFamily: "'Bangers', cursive", fontSize: '13px', letterSpacing: '3px', color: '#7c3aed', marginBottom: '8px', display: 'block' }}>PICK YOUR STORY</span>
-          <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '38px', color: '#111', marginBottom: '8px', letterSpacing: '1px' }}>WHICH BUSINESS ARE YOU?</h2>
+          <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '28px' : '38px', color: '#111', marginBottom: '8px', letterSpacing: '1px' }}>WHICH BUSINESS ARE YOU?</h2>
           <p style={{ fontSize: '15px', color: '#666', marginBottom: '32px' }}>See exactly how Popproof works for your type of business</p>
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {Object.entries(STORIES).map(([key, s]) => (
               <button key={key} onClick={() => setActive(key)} style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-                padding: '20px 28px', border: `3px solid ${active === key ? s.color : '#111'}`,
-                borderRadius: '12px', cursor: 'pointer', minWidth: '140px',
+                padding: mobile ? '14px 18px' : '20px 28px',
+                border: `3px solid ${active === key ? s.color : '#111'}`,
+                borderRadius: '12px', cursor: 'pointer',
+                minWidth: mobile ? '100px' : '140px',
                 background: active === key ? s.bg : 'white',
                 boxShadow: active === key ? '3px 3px 0 #111' : '5px 5px 0 #111',
                 transform: active === key ? 'translate(2px,2px)' : 'none',
                 transition: 'all 0.15s',
               }}>
-                <span style={{ fontSize: '36px' }}>{s.ico}</span>
-                <span style={{ fontFamily: "'Bangers', cursive", fontSize: '17px', letterSpacing: '1px' }}>{s.label}</span>
+                <span style={{ fontSize: '28px' }}>{s.ico}</span>
+                <span style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '13px' : '17px', letterSpacing: '1px' }}>{s.label}</span>
                 <span style={{ fontSize: '10px', color: '#888', fontWeight: 700 }}>{s.sub}</span>
               </button>
             ))}
@@ -555,31 +599,28 @@ function BizStories() {
         </div>
       </div>
 
-      {/* Story panels */}
-      <div style={{ background: '#fffde7', padding: '0 32px 60px' }}>
+      <div style={{ background: '#fffde7', padding: mobile ? '0 16px 40px' : '0 32px 60px' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           {story.chapters.map((chapter, ci) => (
             <div key={ci} style={{ border: '3px solid #111', borderRadius: '10px', overflow: 'hidden', boxShadow: '7px 7px 0 #111', marginBottom: '28px' }}>
-              {/* Chapter header */}
               <div style={{ padding: '9px 18px', background: chapter.hdrBg, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontFamily: "'Bangers', cursive", fontSize: '14px', letterSpacing: '1.5px', color: 'white' }}>{chapter.title}</span>
+                <span style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '11px' : '14px', letterSpacing: '1.5px', color: 'white' }}>{chapter.title}</span>
                 <div style={{ display: 'flex', gap: '5px' }}>
                   {[0,1,2].map(d => <div key={d} style={{ width: '9px', height: '9px', borderRadius: '50%', background: chapter.dotColor }} />)}
                 </div>
               </div>
-              {/* Panels */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: mobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)' }}>
                 {chapter.panels.map((panel, pi) => (
                   <div key={pi} style={{
-                    borderRight: pi < 3 ? '3px solid #111' : 'none',
-                    borderBottom: 'none',
-                    padding: '13px', minHeight: '200px',
+                    borderRight: mobile ? (pi % 2 === 0 ? '3px solid #111' : 'none') : (pi < 3 ? '3px solid #111' : 'none'),
+                    borderBottom: mobile && pi < 2 ? '3px solid #111' : 'none',
+                    padding: '10px', minHeight: mobile ? '150px' : '200px',
                     display: 'flex', flexDirection: 'column',
                     background: panel.bg, position: 'relative',
                   }}>
                     <div style={{ position: 'absolute', top: '5px', left: '7px', fontFamily: "'Bangers', cursive", fontSize: '12px', color: '#ddd' }}>{pi + 1}</div>
                     {panel.content()}
-                    <div style={{ padding: '7px 10px', fontSize: '11px', fontWeight: 700, color: 'white', textAlign: 'center', lineHeight: 1.4, marginTop: 'auto', background: panel.caption.bg }}>
+                    <div style={{ padding: '6px 8px', fontSize: '10px', fontWeight: 700, color: 'white', textAlign: 'center', lineHeight: 1.4, marginTop: 'auto', background: panel.caption.bg }}>
                       {panel.caption.text}
                     </div>
                   </div>
@@ -587,8 +628,6 @@ function BizStories() {
               </div>
             </div>
           ))}
-
-          {/* Results */}
           {active === 'salon' && <ResultsGrid items={[{ num: '+60%', label: 'More bookings in 30 days', color: '#7c3aed' }, { num: '€0', label: 'Ad spend needed', color: '#15803d' }, { num: '2×', label: 'Team size (hired staff!)', color: '#f97316' }]} />}
           {active === 'cafe' && <ResultsGrid items={[{ num: '+40%', label: 'Weekday revenue', color: '#f97316' }, { num: '3×', label: 'Tuesday covers', color: '#15803d' }, { num: '€0', label: 'Extra marketing spend', color: '#7c3aed' }]} />}
           {active === 'shop' && <ResultsGrid items={[{ num: '3.2%', label: 'Conversion (was 0.8%)', color: '#0d9488' }, { num: '4×', label: 'Revenue, same traffic', color: '#15803d' }, { num: '€0', label: 'Extra ad spend', color: '#7c3aed' }]} />}
@@ -600,6 +639,13 @@ function BizStories() {
 
 // ============ FEATURES ============
 function Features() {
+  const [mobile, setMobile] = useState(isMobile())
+  useEffect(() => {
+    const handle = () => setMobile(isMobile())
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
+
   const feats = [
     { ico: '⚡', bg: '#FFE033', title: 'REAL-TIME NOTIFICATIONS', desc: 'Show live bookings, purchases, and reviews the moment they happen. Zero delay, maximum impact.' },
     { ico: '📍', bg: '#ede9fe', title: 'HYPER-LOCAL TARGETING', desc: '"Marta from your street just booked!" Ultra-relevant notifications that feel personal.' },
@@ -609,17 +655,15 @@ function Features() {
     { ico: '💬', bg: '#FFE033', title: 'REVIEW COLLECTION', desc: 'Automatically collect and display Google reviews. Build credibility on autopilot.' },
   ]
   return (
-    <section id="features" style={{ background: 'white', padding: '60px 32px', borderTop: '3px solid #111' }}>
+    <section id="features" style={{ background: 'white', padding: mobile ? '40px 16px' : '60px 32px', borderTop: '3px solid #111' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <span style={{ fontFamily: "'Bangers', cursive", fontSize: '13px', letterSpacing: '3px', color: '#7c3aed', display: 'block', marginBottom: '8px' }}>WHAT YOU GET</span>
-          <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '38px', color: '#111', letterSpacing: '1px' }}>EVERY SUPERPOWER INCLUDED ⚡</h2>
+          <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '28px' : '38px', color: '#111', letterSpacing: '1px' }}>EVERY SUPERPOWER INCLUDED ⚡</h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '18px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: '14px' }}>
           {feats.map((f, i) => (
-            <div key={i} style={{ background: 'white', border: '3px solid #111', borderRadius: '10px', padding: '22px', boxShadow: '5px 5px 0 #111', transition: 'all 0.15s', cursor: 'default' }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translate(-2px,-2px)'; e.currentTarget.style.boxShadow = '7px 7px 0 #111' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '5px 5px 0 #111' }}>
+            <div key={i} style={{ background: 'white', border: '3px solid #111', borderRadius: '10px', padding: '18px', boxShadow: '5px 5px 0 #111' }}>
               <div style={{ width: '42px', height: '42px', borderRadius: '9px', border: '3px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '14px', fontSize: '20px', background: f.bg }}>
                 {f.ico}
               </div>
@@ -635,13 +679,19 @@ function Features() {
 
 // ============ PRICING ============
 function Pricing() {
+  const [mobile, setMobile] = useState(isMobile())
+  useEffect(() => {
+    const handle = () => setMobile(isMobile())
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
+
   return (
-    <section id="pricing" style={{ background: '#FFE033', padding: '60px 32px', borderTop: '3px solid #111', textAlign: 'center' }}>
+    <section id="pricing" style={{ background: '#FFE033', padding: mobile ? '40px 16px' : '60px 32px', borderTop: '3px solid #111', textAlign: 'center' }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <span style={{ fontFamily: "'Bangers', cursive", fontSize: '13px', letterSpacing: '3px', color: '#7c3aed', display: 'block', marginBottom: '8px' }}>SIMPLE PRICING</span>
-        <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '38px', color: '#111', letterSpacing: '1px', marginBottom: '32px' }}>ONE PLAN. EVERYTHING INCLUDED.</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', textAlign: 'left' }}>
-          {/* Free */}
+        <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '26px' : '38px', color: '#111', letterSpacing: '1px', marginBottom: '32px' }}>ONE PLAN. EVERYTHING INCLUDED.</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap: '18px', textAlign: 'left' }}>
           <div style={{ background: 'white', border: '3px solid #111', borderRadius: '12px', padding: '26px', boxShadow: '5px 5px 0 #111' }}>
             <h3 style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', marginBottom: '6px' }}>STARTER</h3>
             <div style={{ fontFamily: "'Bangers', cursive", fontSize: '44px', lineHeight: 1, marginBottom: '6px' }}>€0<sub style={{ fontSize: '13px', fontFamily: "'Comic Neue', cursive", fontWeight: 400 }}>/forever</sub></div>
@@ -652,18 +702,15 @@ function Pricing() {
                 </li>
               ))}
             </ul>
-            <a href="/signup" style={{ display: 'block', width: '100%', fontFamily: "'Bangers', cursive", fontSize: '18px', letterSpacing: '0.5px', padding: '10px', border: '3px solid #111', borderRadius: '7px', cursor: 'pointer', marginTop: '8px', boxShadow: '4px 4px 0 #111', background: 'transparent', color: '#111', textAlign: 'center', textDecoration: 'none' }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translate(-1px,-1px)'; e.currentTarget.style.boxShadow = '5px 5px 0 #111' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '4px 4px 0 #111' }}>
+            <a href="/signup" style={{ display: 'block', width: '100%', fontFamily: "'Bangers', cursive", fontSize: '18px', letterSpacing: '0.5px', padding: '10px', border: '3px solid #111', borderRadius: '7px', cursor: 'pointer', marginTop: '8px', boxShadow: '4px 4px 0 #111', background: 'transparent', color: '#111', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}>
               GET STARTED FREE
             </a>
           </div>
-          {/* Pro */}
-          <div style={{ background: '#7c3aed', border: '3px solid #111', borderRadius: '12px', padding: '26px', boxShadow: '6px 6px 0 #111', position: 'relative' }}>
+          <div style={{ background: '#7c3aed', border: '3px solid #111', borderRadius: '12px', padding: '26px', boxShadow: '6px 6px 0 #111' }}>
             <div style={{ display: 'inline-block', background: '#FFE033', color: '#111', border: '2px solid #111', fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '4px', marginBottom: '10px' }}>⭐ MOST POPULAR</div>
             <h3 style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', marginBottom: '6px', color: 'white' }}>PRO</h3>
             <div style={{ fontFamily: "'Bangers', cursive", fontSize: '44px', lineHeight: 1, marginBottom: '6px', color: '#FFE033' }}>€19<sub style={{ fontSize: '13px', fontFamily: "'Comic Neue', cursive", fontWeight: 400, color: 'rgba(255,255,255,0.7)' }}>/month</sub></div>
-            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', fontWeight: 700, marginBottom: '8px' }}>🎁 14-day free trial — no card needed</div>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', fontWeight: 700, marginBottom: '8px' }}>🎁 14-day free trial</div>
             <ul style={{ listStyle: 'none', margin: '14px 0', padding: 0 }}>
               {['Unlimited notifications', 'Hyper-local targeting', 'All business types', 'Review collection', 'GDPR compliant', 'Priority support'].map((item, i) => (
                 <li key={i} style={{ fontSize: '12px', padding: '4px 0', display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.9)' }}>
@@ -671,9 +718,7 @@ function Pricing() {
                 </li>
               ))}
             </ul>
-            <a href="/signup" style={{ display: 'block', width: '100%', fontFamily: "'Bangers', cursive", fontSize: '18px', letterSpacing: '0.5px', padding: '10px', border: '3px solid #111', borderRadius: '7px', cursor: 'pointer', marginTop: '8px', boxShadow: '4px 4px 0 #111', background: 'white', color: '#7c3aed', textAlign: 'center', textDecoration: 'none' }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translate(-1px,-1px)'; e.currentTarget.style.boxShadow = '5px 5px 0 #111' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '4px 4px 0 #111' }}>
+            <a href="/signup" style={{ display: 'block', width: '100%', fontFamily: "'Bangers', cursive", fontSize: '18px', letterSpacing: '0.5px', padding: '10px', border: '3px solid #111', borderRadius: '7px', cursor: 'pointer', marginTop: '8px', boxShadow: '4px 4px 0 #111', background: 'white', color: '#7c3aed', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}>
               🚀 START FREE TRIAL
             </a>
           </div>
@@ -685,19 +730,26 @@ function Pricing() {
 
 // ============ TESTIMONIALS ============
 function Testimonials() {
+  const [mobile, setMobile] = useState(isMobile())
+  useEffect(() => {
+    const handle = () => setMobile(isMobile())
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
+
   const tests = [
     { stars: 5, text: 'My booking rate went up 60% in the first month. The hyper-local notifications are genius — clients love seeing names from their own neighborhood.', name: 'Ieva K.', biz: 'Salon Owner, Riga', avatar: '💇‍♀️' },
     { stars: 5, text: 'Simple setup, real results. My Tuesday mornings are now fully booked. I tell every local business owner about Popproof.', name: 'Martins L.', biz: 'Café Owner, Jūrmala', avatar: '☕' },
     { stars: 5, text: 'Conversion went from 1.1% to 3.4%. Same traffic, way more sales. The live purchase bubbles create genuine urgency.', name: 'Zane B.', biz: 'Shopify Store Owner', avatar: '🛍️' },
   ]
   return (
-    <section style={{ background: 'white', padding: '60px 32px', borderTop: '3px solid #111' }}>
+    <section style={{ background: 'white', padding: mobile ? '40px 16px' : '60px 32px', borderTop: '3px solid #111' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <span style={{ fontFamily: "'Bangers', cursive", fontSize: '13px', letterSpacing: '3px', color: '#7c3aed', display: 'block', marginBottom: '8px' }}>REAL RESULTS</span>
-          <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '38px', color: '#111', letterSpacing: '1px' }}>BUSINESSES LOVE POPPROOF ⭐</h2>
+          <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: mobile ? '28px' : '38px', color: '#111', letterSpacing: '1px' }}>BUSINESSES LOVE POPPROOF ⭐</h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '18px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: '18px' }}>
           {tests.map((t, i) => (
             <div key={i} style={{ background: 'white', border: '3px solid #111', borderRadius: '10px', padding: '20px', boxShadow: '4px 4px 0 #111' }}>
               <div style={{ color: '#FFE033', fontSize: '16px', marginBottom: '8px' }}>{'★'.repeat(t.stars)}</div>
@@ -720,7 +772,7 @@ function Testimonials() {
 // ============ CTA ============
 function CtaSection() {
   return (
-    <section style={{ background: '#0d0a1a', padding: '70px 32px', borderTop: '3px solid #111', textAlign: 'center' }}>
+    <section style={{ background: '#0d0a1a', padding: '70px 20px', borderTop: '3px solid #111', textAlign: 'center' }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <h2 style={{ fontFamily: "'Bangers', cursive", fontSize: '44px', color: 'white', letterSpacing: '1px', marginBottom: '12px' }}>
           READY TO <span style={{ color: '#FFE033' }}>EXPLODE</span> YOUR CONVERSIONS? 🚀
@@ -736,7 +788,7 @@ function CtaSection() {
             LOGIN →
           </a>
         </div>
-        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '16px', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ Start 14-day free trial &nbsp;·&nbsp; ✓ Cancel anytime</p>
+        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '16px', fontWeight: 700 }}>✓ 14-day free trial &nbsp;·&nbsp; ✓ Cancel anytime</p>
       </div>
     </section>
   )
@@ -744,11 +796,24 @@ function CtaSection() {
 
 // ============ FOOTER ============
 function Footer() {
+  const [mobile, setMobile] = useState(isMobile())
+  useEffect(() => {
+    const handle = () => setMobile(isMobile())
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
+
   return (
-    <footer style={{ background: '#0d0a1a', borderTop: '3px solid #111', padding: '40px 32px' }}>
-      <div style={{ maxWidth: '960px', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '32px' }}>
+    <footer style={{ background: '#0d0a1a', borderTop: '3px solid #111', padding: mobile ? '32px 16px' : '40px 32px' }}>
+      <div style={{ maxWidth: '960px', margin: '0 auto', display: 'grid', gridTemplateColumns: mobile ? '1fr' : '2fr 1fr 1fr 1fr', gap: mobile ? '24px' : '32px' }}>
         <div>
-          <img src="/popproof-logo.png" alt="Popproof" style={{ height: '34px', objectFit: 'contain', marginBottom: '12px' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '12px' }}>
+            <span style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', color: 'white', letterSpacing: '2px' }}>P</span>
+            <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', border: '2px solid #333', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ color: 'white', fontSize: '10px', fontWeight: 900 }}>✓</span>
+            </div>
+            <span style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', color: 'white', letterSpacing: '2px' }}>P PROOF</span>
+          </div>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7, maxWidth: '240px' }}>
             Social proof & FOMO notifications for local businesses. Turn visitors into customers in 5 minutes.
           </p>
@@ -761,14 +826,12 @@ function Footer() {
           <div key={i}>
             <h4 style={{ fontFamily: "'Bangers', cursive", fontSize: '14px', color: 'white', letterSpacing: '1px', marginBottom: '12px' }}>{col.title}</h4>
             {col.links.map(([label, href]) => (
-              <a key={label} href={href} style={{ display: 'block', fontSize: '12px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', marginBottom: '6px', fontWeight: 700 }}
-                onMouseEnter={e => e.target.style.color = '#FFE033'}
-                onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.4)'}>{label}</a>
+              <a key={label} href={href} style={{ display: 'block', fontSize: '12px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', marginBottom: '6px', fontWeight: 700 }}>{label}</a>
             ))}
           </div>
         ))}
       </div>
-      <div style={{ maxWidth: '960px', margin: '24px auto 0', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ maxWidth: '960px', margin: '24px auto 0', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
         <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>© 2025 Popproof · SIA Nexvian · Riga, Latvia</span>
         <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>hello@popproof.io</span>
       </div>
