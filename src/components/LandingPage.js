@@ -92,11 +92,21 @@ function Nav({ onNavigate }) {
   return (
     <nav style={{ background: '#0d0a1a', borderBottom: '3px solid #111', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, flexWrap: 'wrap', gap: '8px' }}>
       <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '5px', textDecoration: 'none' }}>
-        <img src="/popproof-logo.png" alt="Popproof" style={{ height: '34px', objectFit: 'contain' }} />
+<div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+  <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
+  <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <span style={{ color: 'white', fontSize: '12px', fontWeight: 900 }}>✓</span>
+  </div>
+  <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
+  <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '4px' }}>
+    <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', color: 'white', letterSpacing: '2px', lineHeight: 1 }}>PROOF</span>
+    <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, letterSpacing: '1px', lineHeight: 1 }}>BY NEXVIAN</span>
+  </div>
+</div>
       </a>
       <div style={{ display: 'flex', gap: '22px', alignItems: 'center' }}>
-        {[['Features', 'features'], ['Pricing', 'pricing'], ['Stories', 'stories']].map(([label, id]) => (
-          <button key={id} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })}
+        {[['Home', ''], ['Features', 'features'], ['Pricing', 'pricing'], ['Stories', 'stories']].map(([label, id]) => (
+          <button key={id} onClick={() => id ? document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }) : window.scrollTo({ top: 0, behavior: 'smooth' })}
             style={{ color: 'rgba(255,255,255,0.55)', fontSize: '15px', fontWeight: 700, cursor: 'pointer', background: 'none', border: 'none', fontFamily: "'Bangers', cursive", letterSpacing: '1px' }}
             onMouseEnter={e => e.target.style.color = '#FFE033'}
             onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}
