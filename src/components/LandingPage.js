@@ -245,19 +245,19 @@ function TrustBar() {
 // ============ BIZ SELECTOR + STORIES ============
 const STORIES = {
   salon: {
-    label: 'BEAUTY SALON', ico: '✂️', sub: 'Sofia\'s Story',
+    label: 'BEAUTY SALON', ico: '✂️', sub: 'Ausma\'s Story',
     color: '#7c3aed', bg: '#f5f3ff', borderColor: '#7c3aed',
     chapters: [
       {
         title: '😭 CHAPTER 1 — THE STRUGGLE IS REAL', hdrBg: '#1a0a2e', dotColor: '#ff3b3b',
         panels: [
-          { bg: 'white', caption: { bg: '#7c3aed', text: 'Sofia opens her salon website. She is READY. 😤' }, content: () => (
+          { bg: 'white', caption: { bg: '#7c3aed', text: 'Ausma opens her salon website. She is READY. 😤' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center', maxWidth: '175px' }}>
                 I built my salon website! Clients will flood in like crazy! 🎉
               </div>
               <div style={{ fontSize: '48px' }}>💇‍♀️</div>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: '#9d174d' }}>Sofia — Salon Owner 💅</div>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: '#9d174d' }}>Ausma — Salon Owner 💅</div>
             </div>
           )},
           { bg: '#fdf2f8', caption: { bg: '#111', text: 'One month. Zero bookings. Even crickets stopped showing up.' }, content: () => (
@@ -276,7 +276,7 @@ const STORIES = {
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', color: '#ff3b3b' }}>BOUNCE!</div>
             </div>
           )},
-          { bg: '#fff1f2', caption: { bg: '#ff3b3b', text: 'Sofia is desperate. She almost gives up. 😢' }, content: () => (
+          { bg: '#fff1f2', caption: { bg: '#ff3b3b', text: 'Ausma is desperate. She almost gives up. 😢' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ background: '#fecdd3', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center', maxWidth: '175px' }}>
                 Why won't anyone book?! Is my website broken?! 😭
@@ -290,7 +290,7 @@ const STORIES = {
       {
         title: '💡 CHAPTER 2 — ENTER POPPROOF', hdrBg: '#1e1b4b', dotColor: '#FFE033',
         panels: [
-          { bg: '#f5f3ff', caption: { bg: '#7c3aed', text: 'Sofia discovers Popproof. One script tag. 5 minutes.' }, content: () => (
+          { bg: '#f5f3ff', caption: { bg: '#7c3aed', text: 'Ausma discovers Popproof. One script tag. 5 minutes.' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ fontSize: '40px' }}>💡</div>
               <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center' }}>
@@ -319,7 +319,7 @@ const STORIES = {
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: '#15803d', letterSpacing: '2px' }}>FOMO! 🔥</div>
             </div>
           )},
-          { bg: '#fefce8', caption: { bg: '#854d0e', text: 'Click. Book. Pay. BOOM! Sofia has her first client! 🎉' }, content: () => (
+          { bg: '#fefce8', caption: { bg: '#854d0e', text: 'Click. Book. Pay. BOOM! Ausma has her first client! 🎉' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ fontSize: '40px' }}>📅✅</div>
               <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center' }}>
@@ -349,7 +349,7 @@ const STORIES = {
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '18px', color: '#7c3aed' }}>WEEK 2: FULLY BOOKED!</div>
             </div>
           )},
-          { bg: '#fefce8', caption: { bg: '#854d0e', text: 'Month 1: Sofia hires a second stylist! 💪' }, content: () => (
+          { bg: '#fefce8', caption: { bg: '#854d0e', text: 'Month 1: Ausma hires a second stylist! 💪' }, content: () => (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               <div style={{ fontSize: '40px' }}>👯‍♀️</div>
               <div style={{ background: '#FFE033', border: '2.5px solid #111', borderRadius: '14px', padding: '6px 11px', fontSize: '11px', fontWeight: 700, color: '#111', textAlign: 'center' }}>
