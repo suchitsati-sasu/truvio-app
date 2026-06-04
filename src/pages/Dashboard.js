@@ -7,6 +7,8 @@ export default function Dashboard() {
   const [copied, setCopied] = useState(false)
   const [reviewLinkCopied, setReviewLinkCopied] = useState(false)
   const [profile, setProfile] = useState(null)
+  const [placeId, setPlaceId] = useState('')
+  const [connecting, setConnecting] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -65,6 +67,27 @@ export default function Dashboard() {
     const now = new Date()
     const diffDays = (now - createdAt) / (1000 * 60 * 60 * 24)
     return Math.max(0, 14 - Math.floor(diffDays))
+  }
+
+  const handleConnectGoogle = async () => {
+    if (!placeId.trim()) return alert('Place ID enter karo!')
+    setConnecting(true)
+    try {
+      const res = await fetch('/api/fetch-reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id, place_id: placeId.trim() })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        alert(`✅ ${data.count} reviews imported as FOMO notifications!`)
+      } else {
+        alert('❌ Error: ' + data.error)
+      }
+    } catch (e) {
+      alert('❌ Network error')
+    }
+    setConnecting(false)
   }
 
   const widgetCode = user ? `<script src="https://popproof.io/widget.js" data-user-id="${user.id}"></script>` : 'Loading...'
@@ -211,6 +234,50 @@ export default function Dashboard() {
               transition: 'all 0.15s',
             }}>
               {reviewLinkCopied ? '✅ COPIED!' : '📋 COPY REVIEW LINK'}
+            </button>
+          </div>
+
+          {/* GOOGLE BUSINESS CONNECT */}
+          <div style={{ background: '#1a1030', border: '3px solid rgba(255,224,51,0.4)', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '5px 5px 0 rgba(255,224,51,0.3)' }}>
+            <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: '#FFE033', letterSpacing: '1px', marginBottom: '6px' }}>🔗 CONNECT GOOGLE BUSINESS</div>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', fontWeight: 700, marginBottom: '4px' }}>Enter your Google Place ID to import reviews as FOMO notifications.</p>
+            <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '12px', marginBottom: '16px' }}>
+              Find your Place ID at: <a href="https://developers.google.com/maps/documentation/places/web-service/place-id" target="_blank" rel="noreferrer" style={{ color: '#FFE033' }}>developers.google.com/maps/place-id</a>
+            </p>
+            <input
+              type="text"
+              placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4"
+              value={placeId}
+              onChange={(e) => setPlaceId(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                background: '#0a0614',
+                border: '2px solid rgba(255,224,51,0.3)',
+                borderRadius: '8px',
+                color: 'white',
+                fontSize: '13px',
+                fontFamily: 'monospace',
+                marginBottom: '14px',
+                boxSizing: 'border-box',
+              }}
+            />
+            <button
+              onClick={handleConnectGoogle}
+              disabled={connecting}
+              style={{
+                fontFamily: "'Bangers', cursive",
+                fontSize: '16px',
+                letterSpacing: '1px',
+                padding: '10px 24px',
+                background: connecting ? '#555' : '#FFE033',
+                color: '#111',
+                border: '3px solid #111',
+                borderRadius: '8px',
+                cursor: connecting ? 'not-allowed' : 'pointer',
+                boxShadow: '3px 3px 0 #111',
+              }}>
+              {connecting ? '⏳ CONNECTING...' : '🔗 CONNECT & IMPORT REVIEWS'}
             </button>
           </div>
 
