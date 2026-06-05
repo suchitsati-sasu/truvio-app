@@ -9,6 +9,7 @@ export default function Dashboard() {
   const [profile, setProfile] = useState(null)
   const [placeId, setPlaceId] = useState('')
   const [connecting, setConnecting] = useState(false)
+  const [cancelling, setCancelling] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -48,6 +49,28 @@ export default function Dashboard() {
   const handleLogout = async () => {
     await supabase.auth.signOut()
     window.location.href = '/login'
+  }
+
+  const handleCancelSubscription = async () => {
+    const confirm = window.confirm('Are you sure you want to cancel? Your subscription will remain active until the end of the billing period.')
+    if (!confirm) return
+    setCancelling(true)
+    try {
+      const res = await fetch('/api/cancel-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        alert('✅ Subscription cancelled. You can use Popproof until the end of your billing period.')
+      } else {
+        alert('❌ Error: ' + data.error)
+      }
+    } catch (e) {
+      alert('❌ Network error')
+    }
+    setCancelling(false)
   }
 
   const stars = (rating) => '⭐'.repeat(rating)
@@ -111,12 +134,7 @@ export default function Dashboard() {
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
-      <div style={{
-        minHeight: '100vh',
-        background: '#0d0a1a',
-        backgroundImage: 'radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)',
-        backgroundSize: '22px 22px',
-      }}>
+      <div style={{ minHeight: '100vh', background: '#0d0a1a', backgroundImage: 'radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)', backgroundSize: '22px 22px' }}>
 
         {/* NAV */}
         <nav style={{ background: '#0d0a1a', borderBottom: '3px solid #111', padding: '14px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
@@ -125,18 +143,7 @@ export default function Dashboard() {
           </a>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontWeight: 700 }}>{user?.email}</span>
-            <button onClick={handleLogout} style={{
-              fontFamily: "'Bangers', cursive",
-              fontSize: '16px',
-              letterSpacing: '1px',
-              padding: '8px 20px',
-              background: 'transparent',
-              color: 'white',
-              border: '3px solid #ff4444',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              boxShadow: '3px 3px 0 #ff4444',
-            }}>LOGOUT</button>
+            <button onClick={handleLogout} style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '8px 20px', background: 'transparent', color: 'white', border: '3px solid #ff4444', borderRadius: '6px', cursor: 'pointer', boxShadow: '3px 3px 0 #ff4444' }}>LOGOUT</button>
           </div>
         </nav>
 
@@ -145,20 +152,24 @@ export default function Dashboard() {
           {/* WELCOME BANNER */}
           <div style={{ background: '#1a1030', border: '3px solid rgba(124,58,237,0.4)', borderRadius: '14px', padding: '20px 24px', marginBottom: '28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <div>
-              <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px' }}>
-                👋 WELCOME BACK!
-              </div>
+              <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px' }}>👋 WELCOME BACK!</div>
               <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, marginTop: '4px' }}>
                 {profile?.business_name ? `🏢 ${profile.business_name}` : user?.email}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
               {profile?.subscription_status === 'active' ? (
                 <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '6px 16px', background: '#00bb77', border: '3px solid #111', borderRadius: '20px', color: 'white', boxShadow: '3px 3px 0 #111' }}>✅ ACTIVE</span>
               ) : trialExpired ? (
                 <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '6px 16px', background: '#ff4444', border: '3px solid #111', borderRadius: '20px', color: 'white', boxShadow: '3px 3px 0 #111' }}>❌ EXPIRED</span>
               ) : (
                 <span style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '6px 16px', background: '#f59e0b', border: '3px solid #111', borderRadius: '20px', color: 'white', boxShadow: '3px 3px 0 #111' }}>⏳ {daysLeft} DAYS LEFT</span>
+              )}
+              {/* Cancel button — only for active subscribers */}
+              {profile?.subscription_status === 'active' && (
+                <button onClick={handleCancelSubscription} disabled={cancelling} style={{ fontFamily: "'Bangers', cursive", fontSize: '14px', letterSpacing: '1px', padding: '6px 14px', background: 'transparent', color: '#ff4444', border: '2px solid #ff4444', borderRadius: '20px', cursor: 'pointer' }}>
+                  {cancelling ? '⏳ CANCELLING...' : 'CANCEL PLAN'}
+                </button>
               )}
             </div>
           </div>
@@ -168,18 +179,7 @@ export default function Dashboard() {
             <div style={{ background: '#1a0a0a', border: '3px solid #ff4444', borderRadius: '14px', padding: '30px', marginBottom: '28px', textAlign: 'center', boxShadow: '5px 5px 0 #ff4444' }}>
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '32px', color: '#ff4444', letterSpacing: '1px', marginBottom: '8px' }}>⚠️ TRIAL EXPIRED!</div>
               <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '20px', fontSize: '14px' }}>Subscribe to keep your widget active and keep converting visitors!</p>
-              <button onClick={() => window.location.href = '/pricing'} style={{
-                fontFamily: "'Bangers', cursive",
-                fontSize: '20px',
-                letterSpacing: '1px',
-                padding: '12px 32px',
-                background: '#7c3aed',
-                color: 'white',
-                border: '3px solid #111',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                boxShadow: '5px 5px 0 #111',
-              }}>🚀 SUBSCRIBE NOW — €19/MONTH</button>
+              <button onClick={() => window.location.href = '/pricing'} style={{ fontFamily: "'Bangers', cursive", fontSize: '20px', letterSpacing: '1px', padding: '12px 32px', background: '#7c3aed', color: 'white', border: '3px solid #111', borderRadius: '8px', cursor: 'pointer', boxShadow: '5px 5px 0 #111' }}>🚀 SUBSCRIBE NOW — €19/MONTH</button>
             </div>
           )}
 
@@ -189,23 +189,9 @@ export default function Dashboard() {
               <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px', marginBottom: '6px' }}>🚀 YOUR FOMO WIDGET</div>
               <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', fontWeight: 700, marginBottom: '16px' }}>Paste this code before the closing &lt;/body&gt; tag on your website:</p>
               <div style={{ background: '#0a0614', border: '2px solid rgba(124,58,237,0.3)', borderRadius: '8px', padding: '16px', marginBottom: '14px', overflowX: 'auto' }}>
-                <code style={{ color: '#a78bfa', fontSize: '12px', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
-                  {widgetCode}
-                </code>
+                <code style={{ color: '#a78bfa', fontSize: '12px', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>{widgetCode}</code>
               </div>
-              <button onClick={handleCopy} style={{
-                fontFamily: "'Bangers', cursive",
-                fontSize: '16px',
-                letterSpacing: '1px',
-                padding: '10px 24px',
-                background: copied ? '#00bb77' : '#7c3aed',
-                color: 'white',
-                border: '3px solid #111',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                boxShadow: '3px 3px 0 #111',
-                transition: 'all 0.15s',
-              }}>
+              <button onClick={handleCopy} style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '10px 24px', background: copied ? '#00bb77' : '#7c3aed', color: 'white', border: '3px solid #111', borderRadius: '8px', cursor: 'pointer', boxShadow: '3px 3px 0 #111', transition: 'all 0.15s' }}>
                 {copied ? '✅ COPIED!' : '📋 COPY CODE'}
               </button>
             </div>
@@ -216,23 +202,9 @@ export default function Dashboard() {
             <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px', marginBottom: '6px' }}>⭐ YOUR REVIEW LINK</div>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', fontWeight: 700, marginBottom: '16px' }}>Share this link with customers to collect reviews:</p>
             <div style={{ background: '#0a0614', border: '2px solid rgba(124,58,237,0.3)', borderRadius: '8px', padding: '16px', marginBottom: '14px', overflowX: 'auto' }}>
-              <code style={{ color: '#a78bfa', fontSize: '12px', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
-                {reviewLink}
-              </code>
+              <code style={{ color: '#a78bfa', fontSize: '12px', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>{reviewLink}</code>
             </div>
-            <button onClick={handleCopyReviewLink} style={{
-              fontFamily: "'Bangers', cursive",
-              fontSize: '16px',
-              letterSpacing: '1px',
-              padding: '10px 24px',
-              background: reviewLinkCopied ? '#00bb77' : '#7c3aed',
-              color: 'white',
-              border: '3px solid #111',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              boxShadow: '3px 3px 0 #111',
-              transition: 'all 0.15s',
-            }}>
+            <button onClick={handleCopyReviewLink} style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '10px 24px', background: reviewLinkCopied ? '#00bb77' : '#7c3aed', color: 'white', border: '3px solid #111', borderRadius: '8px', cursor: 'pointer', boxShadow: '3px 3px 0 #111', transition: 'all 0.15s' }}>
               {reviewLinkCopied ? '✅ COPIED!' : '📋 COPY REVIEW LINK'}
             </button>
           </div>
@@ -244,48 +216,17 @@ export default function Dashboard() {
             <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '12px', marginBottom: '16px' }}>
               Find your Place ID at: <a href="https://developers.google.com/maps/documentation/places/web-service/place-id" target="_blank" rel="noreferrer" style={{ color: '#FFE033' }}>developers.google.com/maps/place-id</a>
             </p>
-            <input
-              type="text"
-              placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4"
-              value={placeId}
-              onChange={(e) => setPlaceId(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                background: '#0a0614',
-                border: '2px solid rgba(255,224,51,0.3)',
-                borderRadius: '8px',
-                color: 'white',
-                fontSize: '13px',
-                fontFamily: 'monospace',
-                marginBottom: '14px',
-                boxSizing: 'border-box',
-              }}
+            <input type="text" placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4" value={placeId} onChange={(e) => setPlaceId(e.target.value)}
+              style={{ width: '100%', padding: '12px 16px', background: '#0a0614', border: '2px solid rgba(255,224,51,0.3)', borderRadius: '8px', color: 'white', fontSize: '13px', fontFamily: 'monospace', marginBottom: '14px', boxSizing: 'border-box' }}
             />
-            <button
-              onClick={handleConnectGoogle}
-              disabled={connecting}
-              style={{
-                fontFamily: "'Bangers', cursive",
-                fontSize: '16px',
-                letterSpacing: '1px',
-                padding: '10px 24px',
-                background: connecting ? '#555' : '#FFE033',
-                color: '#111',
-                border: '3px solid #111',
-                borderRadius: '8px',
-                cursor: connecting ? 'not-allowed' : 'pointer',
-                boxShadow: '3px 3px 0 #111',
-              }}>
+            <button onClick={handleConnectGoogle} disabled={connecting} style={{ fontFamily: "'Bangers', cursive", fontSize: '16px', letterSpacing: '1px', padding: '10px 24px', background: connecting ? '#555' : '#FFE033', color: '#111', border: '3px solid #111', borderRadius: '8px', cursor: connecting ? 'not-allowed' : 'pointer', boxShadow: '3px 3px 0 #111' }}>
               {connecting ? '⏳ CONNECTING...' : '🔗 CONNECT & IMPORT REVIEWS'}
             </button>
           </div>
 
           {/* REVIEWS */}
           <div style={{ background: '#1a1030', border: '3px solid rgba(124,58,237,0.4)', borderRadius: '14px', padding: '24px', boxShadow: '5px 5px 0 rgba(124,58,237,0.3)' }}>
-            <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px', marginBottom: '16px' }}>
-              ⭐ REVIEWS ({reviews.length})
-            </div>
+            <div style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '1px', marginBottom: '16px' }}>⭐ REVIEWS ({reviews.length})</div>
             {reviews.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '30px' }}>
                 <div style={{ fontSize: '40px', marginBottom: '12px' }}>📭</div>

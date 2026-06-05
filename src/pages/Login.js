@@ -52,10 +52,8 @@ export default function Login() {
         position: 'relative',
       }}>
 
-        {/* Glow */}
         <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '600px', height: '300px', background: 'radial-gradient(ellipse,rgba(124,58,237,0.15) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
-        {/* Logo */}
         <a href="/" style={{ textDecoration: 'none', marginBottom: '24px', zIndex: 1, display: 'flex', alignItems: 'center', gap: '4px' }}>
           <span style={{ fontFamily: "'Bangers', cursive", fontSize: '22px', color: 'white', letterSpacing: '2px' }}>P</span>
           <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -68,7 +66,6 @@ export default function Login() {
           </div>
         </a>
 
-        {/* Card */}
         <div style={{
           background: 'white',
           border: '3px solid #111',
@@ -113,8 +110,15 @@ export default function Login() {
               placeholder="Your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ ...inputStyle, marginBottom: '24px' }}
+              style={{ ...inputStyle, marginBottom: '8px' }}
             />
+
+            {/* Forgot Password Link */}
+            <div style={{ textAlign: 'right', marginBottom: '20px' }}>
+              <a href="/forgot-password" style={{ color: '#7c3aed', fontWeight: 700, fontSize: '13px', textDecoration: 'none', fontFamily: "'Comic Neue', cursive" }}>
+                Forgot password?
+              </a>
+            </div>
 
             <button
               type="submit"
@@ -146,7 +150,6 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Trust badges */}
         <div style={{ display: 'flex', gap: '20px', marginTop: '24px', flexWrap: 'wrap', justifyContent: 'center', zIndex: 1 }}>
           {['✓ 14-day free trial', '✓ Cancel anytime', '✓ GDPR compliant'].map((item, i) => (
             <span key={i} style={{ fontSize: '12px', fontWeight: 700, color: 'rgba(255,255,255,0.35)' }}>{item}</span>

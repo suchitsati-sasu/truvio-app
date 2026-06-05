@@ -7,6 +7,8 @@ import ReviewForm from './pages/ReviewForm'
 import Pricing from './pages/Pricing'
 import Notifications from './pages/Notifications'
 import Onboarding from './pages/Onboarding'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
         <Route path="/review" element={<ReviewForm />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   )
