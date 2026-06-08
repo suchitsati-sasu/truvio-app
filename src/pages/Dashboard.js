@@ -199,7 +199,7 @@ export default function Dashboard() {
     ],
     godaddy: [
       { step: 1, title: 'Open your GoDaddy Website Builder', desc: 'Log in to GoDaddy and go to My Products → Websites → Edit Site to open the Website Builder editor.' },
-      { step: 2, title, desc: 'In the editor, look for Settings or the gear icon. Navigate to Website Settings → Custom Code or Custom HTML section.' },
+      { step: 2, title: 'Open Website Settings', desc: 'In the editor, look for Settings or the gear icon. Navigate to Website Settings → Custom Code or Custom HTML section.' },
       { step: 3, title: 'Paste your widget code', desc: 'Paste your Popproof widget code in the "Footer" or "Body" code field. If there is no such field, use the HTML element and place it at the bottom of your last section.' },
       { step: 4, title: 'Save and publish', desc: 'Click Save, then Publish. Your widget is now live on your GoDaddy website.' },
     ],
