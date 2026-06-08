@@ -37,18 +37,7 @@ module.exports = async (req, res) => {
                 You just made a smart move. While your competitors are losing visitors to doubt and hesitation — <strong style="color:white;">you're about to show real-time social proof that converts.</strong>
               </p>
               <p style="color:rgba(255,255,255,0.7);font-size:14px;line-height:1.8;">
-                Here's your widget code — paste it once, and watch the magic happen:
-              </p>
-
-              <!-- Widget code -->
-              <div style="background:#0a0614;border:2px solid rgba(124,58,237,0.3);border-radius:8px;padding:16px;margin:16px 0;">
-                <p style="color:rgba(255,255,255,0.3);font-size:11px;font-weight:700;letter-spacing:2px;margin:0 0 8px 0;">YOUR WIDGET CODE</p>
-                <code style="color:#a78bfa;font-size:12px;word-break:break-all;font-family:monospace;">
-                  &lt;script src="https://popproof.io/widget.js" data-user-id="${userId}"&gt;&lt;/script&gt;
-                </code>
-              </div>
-              <p style="color:rgba(255,255,255,0.5);font-size:13px;">
-                📌 Paste before <strong style="color:white;">&lt;/body&gt;</strong> on your website. Takes 30 seconds.
+                Head to your Dashboard to set up your widget and start showing social proof today!
               </p>
             </div>
 
@@ -58,11 +47,11 @@ module.exports = async (req, res) => {
               <div style="display:flex;flex-direction:column;gap:12px;">
                 <div style="display:flex;align-items:center;gap:12px;">
                   <div style="width:32px;height:32px;background:#7c3aed;border:2px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0;">1</div>
-                  <p style="color:rgba(255,255,255,0.8);font-size:14px;margin:0;">📋 <strong style="color:white;">Copy your widget code</strong> above</p>
+                  <p style="color:rgba(255,255,255,0.8);font-size:14px;margin:0;">🚀 <strong style="color:white;">Go to your Dashboard</strong> and complete setup</p>
                 </div>
                 <div style="display:flex;align-items:center;gap:12px;">
                   <div style="width:32px;height:32px;background:#7c3aed;border:2px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0;">2</div>
-                  <p style="color:rgba(255,255,255,0.8);font-size:14px;margin:0;">🌐 <strong style="color:white;">Paste it on your website</strong></p>
+                  <p style="color:rgba(255,255,255,0.8);font-size:14px;margin:0;">🌐 <strong style="color:white;">Install your widget</strong> on your website</p>
                 </div>
                 <div style="display:flex;align-items:center;gap:12px;">
                   <div style="width:32px;height:32px;background:#7c3aed;border:2px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0;">3</div>

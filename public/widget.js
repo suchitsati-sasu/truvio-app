@@ -8,6 +8,34 @@
   let notifications = []
   let currentIndex = 0
 
+  async function checkSubscription() {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=subscription_status,created_at`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+      }
+    )
+    const data = await res.json()
+    if (!data || data.length === 0) return false
+
+    const profile = data[0]
+    const status = profile.subscription_status
+
+    // Active subscription
+    if (status === 'active') return true
+
+    // Trial check — 14 days from created_at
+    const createdAt = new Date(profile.created_at)
+    const now = new Date()
+    const diffDays = (now - createdAt) / (1000 * 60 * 60 * 24)
+    if (diffDays <= 14) return true
+
+    return false
+  }
+
   async function fetchNotifications() {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/notifications?user_id=eq.${userId}&order=created_at.desc&limit=150`,
@@ -81,6 +109,10 @@
   }
 
   async function init() {
+    // Subscription check — agar expired hai toh widget band
+    const isActive = await checkSubscription()
+    if (!isActive) return
+
     await fetchNotifications()
     if (notifications.length === 0) return
 
