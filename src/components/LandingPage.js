@@ -35,9 +35,9 @@ function FomoWidget() {
           <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="9" height="9" viewBox="0 0 9 9"><path d="M4.5 1L5.8 3.8L9 4.2L6.8 6.3L7.4 9.5L4.5 7.9L1.6 9.5L2.2 6.3L0 4.2L3.2 3.8Z" fill="white"/></svg>
           </div>
-          <span style={{ fontFamily: "'Bangers', cursive", fontSize: '18px', color: '#111' }}>roof</span>
+          <span style={{ fontFamily: "'Bangers', cursive", fontSize: '18px', color: '#111' }}>proof</span>
         </div>
-        <span style={{ fontSize: '9px', color: '#bbb', fontWeight: 700, letterSpacing: '1px', marginLeft: '4px' }}>POWERED BY</span>
+        <span style={{ fontSize: '9px', color: '#bbb', fontWeight: 700, letterSpacing: '1px', marginLeft: '4px' }}>POWERED BY SIA NEXVIAN</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <div style={{ width: '36px', height: '36px', borderRadius: '50%', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0, background: '#f5f3ff' }}>{msgs[idx].ico}</div>
